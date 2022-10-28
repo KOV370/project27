@@ -1,41 +1,42 @@
 package org.laboratory.project27.person;
 
 public class Person {
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    @NotEmpty
     private String firstName;
     private String lastName;
     private int birthYear;
     private PersonJob job;
+    private double salary;
 
-    public Person(String firstName, String lastName, int birthYear, PersonJob job) {
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public Person(String firstName, String lastName, int birthYear, PersonJob job, double salary) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthYear = birthYear;
         this.job = job;
+        this.salary = salary;
     }
 
-    Person(String firstName, String lastName) {//это требование методички, не использовал
+    public Person(String firstName, String lastName) {//это требование методички, не использовал
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public static Person readFromFile() {
-        return null;
-    }
-
-    public static void writeToFile(Person person) {
-
-    }
-
     @Override
     public String toString() {
-        return "Person{" +
+        return
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", birthYear=" + birthYear +
-                ", job=" + job +
-                '}';
+                ", job=" + job ;
     }
 
     public String getFirstName() {
@@ -68,6 +69,20 @@ public class Person {
 
     public void setJob(PersonJob job) {
         this.job = job;
+    }
+
+
+    public  PersonJob setVariableJob(String inputJob) throws PersonException {
+        if (inputJob == null || inputJob.isBlank()) {
+            this.job = PersonJob.UNKNOWN;
+           // return;
+        }
+        for(PersonJob job : PersonJob.values()){
+            if (job.toString().equalsIgnoreCase(inputJob)) {
+                this.job = job;
+            }
+        }
+        throw new PersonException("No such job.");
     }
 
 }

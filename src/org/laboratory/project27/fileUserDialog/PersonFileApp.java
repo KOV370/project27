@@ -1,11 +1,11 @@
 package org.laboratory.project27.fileUserDialog;
-import org.laboratory.project27.person.Person;
-import java.awt.desktop.SystemEventListener;
-import java.io.*;
-import java.util.List;
 
-public class FileUserDialog {
+import java.io.*;
+import java.util.*;
+
+public class PersonFileApp {
     private static String file = "C:\\JetBrains Projects\\Project27_laboratory.txt";
+
 
     public static void unloadToFife(String data, boolean addToData){
         try {
@@ -13,17 +13,23 @@ public class FileUserDialog {
             fileWriter.write(data + "\n");
             fileWriter.close();
         } catch (IOException e) {
-            System.out.println("02 -");
             e.printStackTrace();
         }
     }
-    public static String downloadFromFile(BufferedReader bufferedReader){
+
+    public static String downloadFromFile(){
+        BufferedReader bufferedReader1 = null;
+        try {
+            bufferedReader1 = new BufferedReader(new FileReader(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         String readLine = null;
-            try {
-                readLine = bufferedReader.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            readLine = bufferedReader1.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return readLine;
     }
@@ -33,6 +39,11 @@ public class FileUserDialog {
     }
 
     public static void setFile(String file) {
-        FileUserDialog.file = file;
+        PersonFileApp.file = file;
     }
+
+
+
+
 }
+

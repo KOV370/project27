@@ -1,24 +1,51 @@
 package org.laboratory.project27.concoleUserDialog;
 
-import java.io.*;
+import java.util.Scanner;
 
 public class ConsoleUserDialog {
-    public static void unloadToConsole(String data) {
-        PrintWriter printWriter = new PrintWriter(System.out, true);
-        printWriter.write(data);
-        printWriter.close();
+
+    public static String readStringFromConsole() {
+        String readString = null;
+        Scanner scanner = new Scanner(System.in);
+        if (scanner.hasNext()) {
+            readString = scanner.next();
+
+        } else {
+            System.out.println("Mistake of format. Try again");
+     //       readStringFromConsole();//конверсия
+        }
+        return readString;
     }
 
-    public static String readDataFromConsole() {
-        String read = null;
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-            read =  bufferedReader.readLine();
-        } catch (IOException e) {
-            System.out.println("Mistake String readDataFromConsole()");
-            e.printStackTrace();
+    public static int readIntFromConsole() {
+        int i ;
+        int x = 0;
+        Scanner scanner = new Scanner(System.in);
+        if (scanner.hasNextInt()) {
+            i = scanner.nextInt();
+            if (i > 1900 && i < 2030) {//проверка на интервал дат
+                x = i;
+            } else {
+                System.out.println("Wrong date interval");
+                readIntFromConsole();//конверсия
+            }
+        } else {
+            System.out.println("Mistake of format. Try again");
+            readIntFromConsole();//конверсия
         }
-        return read;
+        return x;
+    }
+
+    public static double readDoubleFromConsole() {
+        double d =0;
+        Scanner scanner = new Scanner(System.in);
+        if (scanner.hasNextDouble()) {
+            d = scanner.nextDouble();
+        } else {
+            System.out.println("Mistake of format. Try again");
+            readIntFromConsole();//конверсия
+        }
+        return d;
     }
 
 }
