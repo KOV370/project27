@@ -5,12 +5,13 @@ import org.laboratory.project27.fileUserDialog.PersonFileApp;
 import org.laboratory.project27.person.Person;
 import org.laboratory.project27.person.PersonJob;
 
-public class PersonConsoleApp {
+public class PersonConsoleApp {//todo по логике если есть в названии слово Console то не должны в названиях методов присутсовать слово File
 
-    public static Person createNewPerson() {
+    public static Person createNewPerson() { //todo метод не должен быть статическим
         Person person = null;
-        System.out.println("Enter first name");
-        String firstName = ConsoleUserDialog.readStringFromConsole();
+        System.out.println("Enter first name"); //todo все выводы System.out.println должны быть только в классе ConsoleUserDialog
+        // создаем в ConsoleUserDialog методы типа print() или output(), их может быть несколько с разными параметрами
+        String firstName = ConsoleUserDialog.readStringFromConsole(); //todo сообщение которое выводится на консоль можно сделать параметром в методах readString(String message), readInt(String message) и т.д.
         System.out.println("Enter last name");
         String lastName = ConsoleUserDialog.readStringFromConsole();
         System.out.println("Enter birthYear");
@@ -32,7 +33,7 @@ public class PersonConsoleApp {
     }
 
     public static void downloadFromFile() {
-        System.out.println("Enter the name for downloading.");
+        System.out.println("Enter the name for downloading."); //todo тоже не должно быть System.out.println
         String name = ConsoleUserDialog.readStringFromConsole();
         String dataPersonFromFile = PersonFileApp.downloadFromFile();
         if (dataPersonFromFile.contains("firstName='" + name))

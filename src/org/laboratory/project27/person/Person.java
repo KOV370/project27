@@ -2,7 +2,7 @@ package org.laboratory.project27.person;
 
 public class Person {
     //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @NotEmpty
+//    @NotEmpty //todo удалить ненужные аннотации
     private String firstName;
     private String lastName;
     private int birthYear;
@@ -75,10 +75,10 @@ public class Person {
     }
 
 
-    public  PersonJob setVariableJob(String inputJob) throws PersonException {
+    public  PersonJob setVariableJob(String inputJob) throws PersonException {  //todo нет класса PersonException, возможно не закоммитилось
         if (inputJob == null || inputJob.isBlank()) {
             this.job = PersonJob.UNKNOWN;
-           // return;
+           // return; //todo почему закоммичен return?
         }
         for(PersonJob job : PersonJob.values()){
             if (job.toString().equalsIgnoreCase(inputJob)) {
