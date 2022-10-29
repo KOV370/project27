@@ -3,12 +3,7 @@ package org.laboratory.project27.personConsoleApp;
 import org.laboratory.project27.concoleUserDialog.ConsoleUserDialog;
 import org.laboratory.project27.fileUserDialog.PersonFileApp;
 import org.laboratory.project27.person.Person;
-import org.laboratory.project27.person.PersonException;
 import org.laboratory.project27.person.PersonJob;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class PersonConsoleApp {
 
@@ -22,7 +17,7 @@ public class PersonConsoleApp {
         int birthYear = ConsoleUserDialog.readIntFromConsole();
         System.out.println("Enter job from the list:");
         PersonJob job = PersonJob.DIRECTOR;//  вызов поля перечисления (название должности) - не получается
-  //      PersonJob job = null;//todo не работает подбор из перечисления требует ststic
+        //      PersonJob job = null;//todo не работает подбор из перечисления требует ststic
 //        try {
 //            job = person.setVariableJob(ConsoleUserDialog.readStringFromConsole());
 //        } catch (PersonException e) {
@@ -31,19 +26,19 @@ public class PersonConsoleApp {
         System.out.println("Set the salary.");
         double salary = ConsoleUserDialog.readDoubleFromConsole();
 
-         person = new Person(firstName, lastName, birthYear, job, salary);
+        person = new Person(firstName, lastName, birthYear, job, salary);
         System.out.println("01- " + person);
         return person;
     }
 
-    public static void downloadFromFile(){
+    public static void downloadFromFile() {
         System.out.println("Enter the name for downloading.");
         String name = ConsoleUserDialog.readStringFromConsole();
         String dataPersonFromFile = PersonFileApp.downloadFromFile();
-        if(dataPersonFromFile.contains(name))
+        if (dataPersonFromFile.contains("firstName='" + name))
             System.out.println(dataPersonFromFile);
         else
-        System.out.println("Name does not found");
+            System.out.println("Name does not found");
     }
 
 

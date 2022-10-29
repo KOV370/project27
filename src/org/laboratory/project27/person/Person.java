@@ -30,13 +30,16 @@ public class Person {
         this.lastName = lastName;
     }
 
+
     @Override
     public String toString() {
         return
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", birthYear=" + birthYear +
-                ", job=" + job ;
+                ", job=" + job +
+                ", salary=" + salary;
+
     }
 
     public String getFirstName() {

@@ -5,21 +5,21 @@ import java.util.Scanner;
 public class ConsoleUserDialog {
 
     public static String readStringFromConsole() {
-        String readString = null;
+        String readString ;
         Scanner scanner = new Scanner(System.in);
         if (scanner.hasNext()) {
             readString = scanner.next();
 
         } else {
             System.out.println("Mistake of format. Try again");
-     //       readStringFromConsole();//конверсия
+          return   readStringFromConsole();//конверсия
         }
         return readString;
     }
 
     public static int readIntFromConsole() {
         int i ;
-        int x = 0;
+        int x ;
         Scanner scanner = new Scanner(System.in);
         if (scanner.hasNextInt()) {
             i = scanner.nextInt();
@@ -27,23 +27,23 @@ public class ConsoleUserDialog {
                 x = i;
             } else {
                 System.out.println("Wrong date interval");
-                readIntFromConsole();//конверсия
+              return   readIntFromConsole();//конверсия
             }
         } else {
             System.out.println("Mistake of format. Try again");
-            readIntFromConsole();//конверсия
+          return   readIntFromConsole();//конверсия
         }
         return x;
     }
 
     public static double readDoubleFromConsole() {
-        double d =0;
+        double d ;
         Scanner scanner = new Scanner(System.in);
         if (scanner.hasNextDouble()) {
             d = scanner.nextDouble();
         } else {
             System.out.println("Mistake of format. Try again");
-            readIntFromConsole();//конверсия
+           return readDoubleFromConsole();//конверсия
         }
         return d;
     }
