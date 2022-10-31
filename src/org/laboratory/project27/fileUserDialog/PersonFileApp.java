@@ -7,7 +7,7 @@ public class PersonFileApp {
     private static String file = "C:\\JetBrains Projects\\Project27_laboratory.txt";
 
 
-    public static void unloadToFife(String data, boolean addToData){
+    public static void unloadToFife(String data, boolean addToData){//todo что такое uNload?)
         try {
             FileWriter fileWriter = new FileWriter(file,addToData);
             fileWriter.write(data + "\n");
