@@ -12,25 +12,19 @@ public class PersonFileApp {
             FileWriter fileWriter = new FileWriter(file,addToData);
             fileWriter.write(data + "\n");
             fileWriter.close();
+            System.out.println("Data added successfully");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static String downloadFromFile(){
-        BufferedReader bufferedReader1 = null;
-        try {
-            bufferedReader1 = new BufferedReader(new FileReader(file));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    public static String downloadFromFile(BufferedReader bufferedReader){
         String readLine = null;
         try {
-            readLine = bufferedReader1.readLine();
+            readLine = bufferedReader.readLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return readLine;
     }
 

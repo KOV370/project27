@@ -1,51 +1,52 @@
 package org.laboratory.project27.concoleUserDialog;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ConsoleUserDialog {
+    static Scanner scanner = new Scanner(System.in);
 
-    public static String readStringFromConsole() {
-        String readString ;
-        Scanner scanner = new Scanner(System.in);
-        if (scanner.hasNext()) {
-            readString = scanner.next();
+    public static String readString() {//todo как заблокировать ввод цифр?
+        String readString;
+        String correctReadString = null;
+        boolean getreadString;
+        //       do {
+        readString = scanner.next();
+        //           int i = readString.length();//попытка отделить буквы от цифр
+//            if(readString.matches("\\D{4}"))
+//            {
+//                correctReadString = readString;
+//               getreadString = true;
+//            }
+//            else
+//            {getreadString = false;
+//            }
+//        }
+//        while (!getreadString);
 
-        } else {
-            System.out.println("Mistake of format. Try again");
-          return   readStringFromConsole();//конверсия
-        }
         return readString;
     }
 
-    public static int readIntFromConsole() {
-        int i ;
-        int x ;
-        Scanner scanner = new Scanner(System.in);
-        if (scanner.hasNextInt()) {
-            i = scanner.nextInt();
-            if (i > 1900 && i < 2030) {//проверка на интервал дат
-                x = i;
-            } else {
-                System.out.println("Wrong date interval");
-              return   readIntFromConsole();//конверсия
-            }
-        } else {
-            System.out.println("Mistake of format. Try again");
-          return   readIntFromConsole();//конверсия
-        }
+    public static int readInt() {//todo во  всех этих методах нет проверки на привильный формат
+        //todo я не знаю как ее сделать, чтобы возвращалось к началу выбора без рекурсии
+        int x;
+        x = scanner.nextInt();
         return x;
     }
 
-    public static double readDoubleFromConsole() {
-        double d ;
-        Scanner scanner = new Scanner(System.in);
+    public static double readDouble() {
+        double d = 0.0;
         if (scanner.hasNextDouble()) {
             d = scanner.nextDouble();
         } else {
-            System.out.println("Mistake of format. Try again");
-           return readDoubleFromConsole();//конверсия
+            System.out.println("Mistake of format double.");
+            d = 0;
         }
         return d;
     }
-
+//    public static int readDouble() {
+//        int x;
+//        x = scanner.nextInt();
+//        return x;
+//    }
 }

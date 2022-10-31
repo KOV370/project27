@@ -9,6 +9,8 @@ public class Person {
     private PersonJob job;
     private double salary;
 
+    public Person() {};
+
     public double getSalary() {
         return salary;
     }
@@ -75,14 +77,15 @@ public class Person {
     }
 
 
-    public  PersonJob setVariableJob(String inputJob) throws PersonException {
+    public PersonJob setVariableJob(String inputJob) throws PersonException {
         if (inputJob == null || inputJob.isBlank()) {
             this.job = PersonJob.UNKNOWN;
-           // return;
+            return PersonJob.UNKNOWN;
         }
         for(PersonJob job : PersonJob.values()){
             if (job.toString().equalsIgnoreCase(inputJob)) {
                 this.job = job;
+                return job;
             }
         }
         throw new PersonException("No such job.");
