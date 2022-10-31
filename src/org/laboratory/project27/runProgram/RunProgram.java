@@ -1,24 +1,37 @@
 package org.laboratory.project27.runProgram;
 
 import org.laboratory.project27.concoleUserDialog.ConsoleUserDialog;
-import org.laboratory.project27.fileUserDialog.PersonFileApp;
-import org.laboratory.project27.person.Person;
-import org.laboratory.project27.personConsoleApp.PersonConsoleApp;
+import org.laboratory.project27.repository.PersonFileRepository;
+import org.laboratory.project27.model.Person;
+import org.laboratory.project27.service.PersonService;
 
 import java.util.InputMismatchException;
 
 public class RunProgram {
+    private static final String MENU = """
+            Menu
+            1-create new record from console
+            2-save record to the file
+            3-find record from the file
+            9-exit     
+            """;
     public static int numberMenu;
+    static Person correctPerson = new Person();//чтобы новая запись сохрянялась после создания и ожидала либо записи
+    //в файл либо продолжения
+    static Person person = null;
+    private final ConsoleUserDialog ui = new ConsoleUserDialog();
+    private final PersonFileRepository personFileRepository = new PersonFileRepository();
+    private final PersonService personService = new PersonService(ui,personFileRepository);
 
     public static void main(String[] args) {
-        System.out.println("Choose the number:");
-        System.out.println("1-create new record from console, 2-save record to the file");
-        System.out.println("3-find record from the file");
-        System.out.println("9-exit");
+        new RunProgram().runMenu();
+    }
 
+    private void runMenu() {
+        ui.printMessage(MENU);
         while (true) {
             try {
-                numberMenu = ConsoleUserDialog.readInt();
+                numberMenu = ui.readInt("Make your choice.");
                 choiceMenu(numberMenu);
             } catch (InputMismatchException r) {
                 System.out.println("Enter right number");//todo как вернуться в метод при неправильном формате?
@@ -26,23 +39,22 @@ public class RunProgram {
             }
         }
     }
-    static  Person correctPerson = new Person();//чтобы новая запись сохрянялась после создания и ожидала либо записи
-    //в файл либо продолжения
-    static Person person = null;
-    private static void choiceMenu(int number) {
+
+    private void choiceMenu(int number) {
         switch (number) {
             case 1:
-                person = PersonConsoleApp.createNewPerson();
+                person = personService.createNewPerson();
                 if (person == null) {
                     return;
-                } else
-                { correctPerson = person;
-                    break;}
+                } else {
+                    correctPerson = person;
+                    break;
+                }
             case 2:
-                    PersonFileApp.unloadToFife(String.valueOf(correctPerson), true);
+                PersonFileRepository.unloadToFife(String.valueOf(correctPerson), true);
                 break;
             case 3:
-                PersonConsoleApp.downloadFromFile();
+                //        PersonService.downloadFromFile();
                 break;
             case 9:
                 System.exit(0);

@@ -1,4 +1,4 @@
-package org.laboratory.project27.person;
+package org.laboratory.project27.model;
 
 public class Person {
     //    @GeneratedValue(strategy = GenerationType.IDENTITY)

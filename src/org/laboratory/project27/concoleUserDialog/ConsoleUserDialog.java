@@ -1,20 +1,20 @@
 package org.laboratory.project27.concoleUserDialog;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ConsoleUserDialog {
-    static Scanner scanner = new Scanner(System.in);
 
-    public static String readString() {//todo как заблокировать ввод цифр?
-        String readString;
-        String correctReadString = null;
-        boolean getreadString;
-        //       do {
-        readString = scanner.next();
-        //           int i = readString.length();//попытка отделить буквы от цифр
-//            if(readString.matches("\\D{4}"))
-//            {
+    Scanner scanner = new Scanner(System.in);
+
+//    public String readString() {
+//        String readString;
+//        String correctReadString = null;
+//        boolean getreadString;
+//        //       do {
+//        readString = scanner.next();
+//
+//            if(readString.matches(".*\\D+.*")) //todo вынести проверку PersonService в метод validateName
+//            { // в-т булеан
 //                correctReadString = readString;
 //               getreadString = true;
 //            }
@@ -23,18 +23,32 @@ public class ConsoleUserDialog {
 //            }
 //        }
 //        while (!getreadString);
+//
+//        return readString;
+//    }
 
-        return readString;
-    }
+    public int readInt(String message) {
+        int x = 0;
+        boolean isError;
+        do {
+            try {
+                isError = false;
+                x = Integer.parseInt(enterString(message));
+            } catch (NumberFormatException e) {
+                System.out.println("Wrong format int");//todo
+                isError = true;
+            }
+        } while (isError);
 
-    public static int readInt() {//todo во  всех этих методах нет проверки на привильный формат
-        //todo я не знаю как ее сделать, чтобы возвращалось к началу выбора без рекурсии
-        int x;
-        x = scanner.nextInt();
         return x;
     }
 
-    public static double readDouble() {
+    public String enterString(String message) {
+        System.out.println(message);
+        return scanner.nextLine();
+    }
+
+    public double readDouble() { //todo  сделать по аналогии с int
         double d = 0.0;
         if (scanner.hasNextDouble()) {
             d = scanner.nextDouble();
@@ -44,9 +58,9 @@ public class ConsoleUserDialog {
         }
         return d;
     }
-//    public static int readDouble() {
-//        int x;
-//        x = scanner.nextInt();
-//        return x;
-//    }
+
+    public void printMessage(String message) {
+        System.out.println(message);
+    }
+
 }
