@@ -54,7 +54,9 @@ public class RunProgram {
                 PersonFileRepository.unloadToFife(String.valueOf(correctPerson), true);
                 break;
             case 3:
-                //        PersonService.downloadFromFile();
+                personFileRepository.getPersonByName();
+                //todo возможен вариани на ссылку этого же метода из PersonService, но тогда надо создать
+                //todo здесь объект PersonService. Нам нужен лишний объект?
                 break;
             case 9:
                 System.exit(0);

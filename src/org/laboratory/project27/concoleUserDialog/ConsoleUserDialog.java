@@ -6,26 +6,10 @@ public class ConsoleUserDialog {
 
     Scanner scanner = new Scanner(System.in);
 
-//    public String readString() {
-//        String readString;
-//        String correctReadString = null;
-//        boolean getreadString;
-//        //       do {
-//        readString = scanner.next();
-//
-//            if(readString.matches(".*\\D+.*")) //todo вынести проверку PersonService в метод validateName
-//            { // в-т булеан
-//                correctReadString = readString;
-//               getreadString = true;
-//            }
-//            else
-//            {getreadString = false;
-//            }
-//        }
-//        while (!getreadString);
-//
-//        return readString;
-//    }
+    public String readString() {
+        String readString = scanner.nextLine();
+        return readString;
+    }
 
     public int readInt(String message) {
         int x = 0;
@@ -35,7 +19,7 @@ public class ConsoleUserDialog {
                 isError = false;
                 x = Integer.parseInt(enterString(message));
             } catch (NumberFormatException e) {
-                System.out.println("Wrong format int");//todo
+                System.out.println("Wrong format int");
                 isError = true;
             }
         } while (isError);
@@ -48,14 +32,19 @@ public class ConsoleUserDialog {
         return scanner.nextLine();
     }
 
-    public double readDouble() { //todo  сделать по аналогии с int
-        double d = 0.0;
-        if (scanner.hasNextDouble()) {
-            d = scanner.nextDouble();
-        } else {
-            System.out.println("Mistake of format double.");
-            d = 0;
+    public double readDouble(String message) {
+        double d = 0;
+        boolean isError;
+        do {
+            try {
+                isError = false;
+                d = Double.parseDouble(enterString(message));
+            } catch (NumberFormatException e) {
+                System.out.println("Wrong format double");
+                isError = true;
+            }
         }
+        while (isError);
         return d;
     }
 

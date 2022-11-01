@@ -20,7 +20,7 @@ public class PersonService {
         boolean correct = true;
         double correctSalary = 0.0;
         String firstName = getValidatedString("Enter First Name");
-        String lastName = ui.enterString("Enter last name");
+        String lastName = getValidatedString("Enter last name");
         int birthYear = ui.readInt("Enter birthYear");
         if (birthYear > 1900 && birthYear < 2030) {
             birthYear_1 = birthYear;
@@ -36,8 +36,7 @@ public class PersonService {
 //        } catch (NullPointerException | PersonException e) {
 //            System.out.println("job - wrong format");
 //        }
-        System.out.println("Set the salary.");
-        double salary = ui.readDouble();
+        double salary = ui.readDouble("Set the salary.");
         if (salary != 0)
             correctSalary = salary;
         else correct = false;
@@ -62,11 +61,13 @@ public class PersonService {
     }
 
     private boolean validateName(String inputString) {
-     //   return !inputString.matches(".*\\D+.*");
-      return   inputString.contains("[a-zA-Z]+");
+        return !inputString.matches(".*\\d+.*");//todo а этот фильтр работает, отсекает цифры
+        //  return    inputString.contains("^[A-Z][a-zA-z]{1,30}$"); //todo не работает
+
+
     }
 
-    public Person getPersonByName(String name) {//todo implement this method
-        return repository.getPersonByName(name);
-    }
+//    public Person getPersonByName(String name) {//todo implement this method для меню 3
+//        return repository.getPersonByName();
+//    }
 }
