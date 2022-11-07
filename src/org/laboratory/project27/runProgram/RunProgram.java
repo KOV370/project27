@@ -52,11 +52,10 @@ public class RunProgram {
                 }
             case 2:
                 PersonFileRepository.unloadToFife(String.valueOf(correctPerson), true);
+                //todo убрать ссылку на PersonFileRepository заменить на метод personService.create()
                 break;
             case 3:
-                personFileRepository.getPersonByName();
-                //todo возможен вариани на ссылку этого же метода из PersonService, но тогда надо создать
-                //todo здесь объект PersonService. Нам нужен лишний объект?
+                personService.getPersonByName(ui.enterString("Enter the name for downloading."));
                 break;
             case 9:
                 System.exit(0);

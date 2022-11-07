@@ -67,7 +67,11 @@ public class PersonService {
 
     }
 
-//    public Person getPersonByName(String name) {//todo implement this method для меню 3
-//        return repository.getPersonByName();
-//    }
+    public Person getPersonByName(String name) {
+        Person person = repository.getPersonByName(name);
+        if (person == null) {
+            System.out.println("Person not found");
+        }
+        return person;
+    }
 }
