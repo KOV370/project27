@@ -2,8 +2,12 @@ package org.laboratory.project27.service;
 
 import org.laboratory.project27.concoleUserDialog.ConsoleUserDialog;
 import org.laboratory.project27.model.Person;
+import org.laboratory.project27.model.PersonException;
 import org.laboratory.project27.model.PersonJob;
 import org.laboratory.project27.repository.PersonFileRepository;
+
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 
 public class PersonService {
     private ConsoleUserDialog ui;
@@ -12,6 +16,15 @@ public class PersonService {
     public PersonService(ConsoleUserDialog ui, PersonFileRepository repository) {
         this.ui = ui;
         this.repository = repository;
+    }
+
+    public static void writeToTheDocument(String file, Person person,boolean addToData) throws Exception {
+        try (FileWriter fileWriter = new FileWriter(file,addToData)) {
+            PersonFileRepository.printToFife(fileWriter, person);
+        }
+        catch (FileNotFoundException e) {
+           throw new PersonException("Document wasn't found " + file);
+      }
     }
 
     public Person createNewPerson() {
@@ -40,7 +53,6 @@ public class PersonService {
         if (salary != 0)
             correctSalary = salary;
         else correct = false;
-
         if (!correct) {
             return null;
 
@@ -71,6 +83,8 @@ public class PersonService {
         Person person = repository.getPersonByName(name);
         if (person == null) {
             System.out.println("Person not found");
+        } else {
+            System.out.println(person);//todo перенсти в Run
         }
         return person;
     }

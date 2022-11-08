@@ -5,7 +5,10 @@ import org.laboratory.project27.repository.PersonFileRepository;
 import org.laboratory.project27.model.Person;
 import org.laboratory.project27.service.PersonService;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.InputMismatchException;
+
 
 public class RunProgram {
     private static final String MENU = """
@@ -17,11 +20,12 @@ public class RunProgram {
             """;
     public static int numberMenu;
     static Person correctPerson = new Person();//чтобы новая запись сохрянялась после создания и ожидала либо записи
-    //в файл либо продолжения
     static Person person = null;
     private final ConsoleUserDialog ui = new ConsoleUserDialog();
     private final PersonFileRepository personFileRepository = new PersonFileRepository();
-    private final PersonService personService = new PersonService(ui,personFileRepository);
+    private final PersonService personService = new PersonService(ui, personFileRepository);
+    //в файл либо продолжения
+ //   private final FileWriter fileWriter = new FileWriter(PersonFileRepository.FILE);
 
     public static void main(String[] args) {
         new RunProgram().runMenu();
@@ -33,14 +37,14 @@ public class RunProgram {
             try {
                 numberMenu = ui.readInt("Make your choice.");
                 choiceMenu(numberMenu);
-            } catch (InputMismatchException r) {
-                System.out.println("Enter right number");//todo как вернуться в метод при неправильном формате?
+            } catch (Exception e) {
+                e.printStackTrace();
                 return;
             }
         }
     }
 
-    private void choiceMenu(int number) {
+    private void choiceMenu(int number) throws Exception {
         switch (number) {
             case 1:
                 person = personService.createNewPerson();
@@ -51,7 +55,7 @@ public class RunProgram {
                     break;
                 }
             case 2:
-                PersonFileRepository.unloadToFife(String.valueOf(correctPerson), true);
+                PersonService.writeToTheDocument(PersonFileRepository.FILE, correctPerson, true);
                 //todo убрать ссылку на PersonFileRepository заменить на метод personService.create()
                 break;
             case 3:
