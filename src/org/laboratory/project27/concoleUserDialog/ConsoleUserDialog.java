@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class ConsoleUserDialog {
 
-    Scanner scanner = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
 
     public String readString() {
         String readString = scanner.nextLine();
