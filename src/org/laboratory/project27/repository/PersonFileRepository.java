@@ -23,9 +23,8 @@ public class PersonFileRepository {
         }
     }
 
-
     public Person getPersonByName(String name) {
-        Person person = null;
+        Person person;
         String line;
         try (BufferedReader bufferedReader = new BufferedReader
                 (new FileReader(PersonFileRepository.FILE))) {

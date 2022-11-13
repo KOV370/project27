@@ -12,19 +12,26 @@ import java.io.FileWriter;
 public class PersonService {
     private ConsoleUserDialog ui;
     private PersonFileRepository repository;
-
+    private static final String namePersonJob = """
+            Enter person job from the list:
+            DIRECTOR
+            MANAGER
+            DRIVER
+            SELLER
+            LOADER
+            OFFICE_MANAGER""";
+//todo что означает этот конструктор?
     public PersonService(ConsoleUserDialog ui, PersonFileRepository repository) {
         this.ui = ui;
         this.repository = repository;
     }
 
-    public static void writeToTheDocument(String file, Person person,boolean addToData) throws Exception {
-        try (FileWriter fileWriter = new FileWriter(file,addToData)) {
+    public static void writeToTheDocument(String file, Person person, boolean addToData) throws Exception {
+        try (FileWriter fileWriter = new FileWriter(file, addToData)) {
             PersonFileRepository.printToFife(fileWriter, person);
+        } catch (FileNotFoundException e) {
+            throw new PersonException("Document wasn't found " + file);
         }
-        catch (FileNotFoundException e) {
-           throw new PersonException("Document wasn't found " + file);
-      }
     }
 
     public Person createNewPerson() {
@@ -41,24 +48,22 @@ public class PersonService {
             System.out.println("Wrong interval.");
             correct = false;
         }
-        System.out.println("Enter job from the list:");
-        PersonJob job = PersonJob.DIRECTOR;//  вызов поля перечисления (название должности) - не получается
-        //todo не работает подбор из перечисления требует static
-//        try {
-//            job = Person.setVariableJob(ui.readString());
-//        } catch (NullPointerException | PersonException e) {
-//            System.out.println("job - wrong format");
-//        }
+        System.out.println(namePersonJob);
+        PersonJob job = null;
+        try {
+            job = Person.setVariableJob(getValidatedString("Enter job:"));
+        } catch (PersonException e) {
+            System.out.println("Wrong job");
+        }
         double salary = ui.readDouble("Set the salary.");
         if (salary != 0)
             correctSalary = salary;
         else correct = false;
         if (!correct) {
+            System.out.println("New person did not created");
             return null;
-
         } else {
             person = new Person(firstName, lastName, birthYear_1, job, correctSalary);
-            System.out.println("01- " + person);
         }
         return person;
     }
@@ -73,10 +78,7 @@ public class PersonService {
     }
 
     private boolean validateName(String inputString) {
-        return !inputString.matches(".*\\d+.*");//todo а этот фильтр работает, отсекает цифры
-        //  return    inputString.contains("^[A-Z][a-zA-z]{1,30}$"); //todo не работает
-
-
+        return !inputString.matches(".*\\d+.*");
     }
 
     public Person getPersonByName(String name) {
@@ -84,7 +86,7 @@ public class PersonService {
         if (person == null) {
             System.out.println("Person not found");
         } else {
-            System.out.println(person);//todo перенсти в Run
+            System.out.println(person);
         }
         return person;
     }

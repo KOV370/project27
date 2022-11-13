@@ -1,15 +1,11 @@
 package org.laboratory.project27.model;
 
 public class Person {
-    //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @NotEmpty
     private String firstName;
     private String lastName;
     private int birthYear;
     private PersonJob job;
     private double salary;
-
-    public Person() {};
 
     public double getSalary() {
         return salary;
@@ -27,12 +23,6 @@ public class Person {
         this.salary = salary;
     }
 
-    public Person(String firstName, String lastName) {//это требование методички, не использовал
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
-
     @Override
     public String toString() {
         return
@@ -41,7 +31,6 @@ public class Person {
                 ", birthYear=" + birthYear +
                 ", job=" + job +
                 ", salary=" + salary;
-
     }
 
     public String getFirstName() {
@@ -76,15 +65,14 @@ public class Person {
         this.job = job;
     }
 
-
-    public PersonJob setVariableJob(String inputJob) throws PersonException {
+    public static PersonJob setVariableJob(String inputJob) throws PersonException {
         if (inputJob == null || inputJob.isBlank()) {
-            this.job = PersonJob.UNKNOWN;
+       //     this.job = PersonJob.UNKNOWN;
             return PersonJob.UNKNOWN;
         }
         for(PersonJob job : PersonJob.values()){
             if (job.toString().equalsIgnoreCase(inputJob)) {
-                this.job = job;
+     //           this.job = job;
                 return job;
             }
         }

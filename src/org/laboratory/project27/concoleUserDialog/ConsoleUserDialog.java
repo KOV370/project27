@@ -6,11 +6,6 @@ public class ConsoleUserDialog {
 
     private Scanner scanner = new Scanner(System.in);
 
-    public String readString() {
-        String readString = scanner.nextLine();
-        return readString;
-    }
-
     public int readInt(String message) {
         int x = 0;
         boolean isError;
@@ -23,7 +18,6 @@ public class ConsoleUserDialog {
                 isError = true;
             }
         } while (isError);
-
         return x;
     }
 
