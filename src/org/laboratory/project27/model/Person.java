@@ -6,6 +6,38 @@ public class Person {
     private int birthYear;
     private PersonJob job;
     private double salary;
+    private int id;
+
+    public Person(String firstName, String lastName, int birthYear, PersonJob job, double salary, int id) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthYear = birthYear;
+        this.job = job;
+        this.salary = salary;
+        this.id = id;
+    }
+
+    public static PersonJob setVariableJob(String inputJob) throws PersonException {
+        if (inputJob == null || inputJob.isBlank()) {
+            //     this.job = PersonJob.UNKNOWN;
+            return PersonJob.UNKNOWN;
+        }
+        for (PersonJob job : PersonJob.values()) {
+            if (job.toString().equalsIgnoreCase(inputJob)) {
+                //           this.job = job;
+                return job;
+            } else return PersonJob.UNKNOWN;
+        }
+        throw new PersonException("No such job.");
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public double getSalary() {
         return salary;
@@ -15,22 +47,15 @@ public class Person {
         this.salary = salary;
     }
 
-    public Person(String firstName, String lastName, int birthYear, PersonJob job, double salary) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthYear = birthYear;
-        this.job = job;
-        this.salary = salary;
-    }
-
     @Override
     public String toString() {
         return
-                "firstName=" + firstName  +
-                ", lastName=" + lastName +
-                ", birthYear=" + birthYear +
-                ", job=" + job +
-                ", salary=" + salary;
+                "firstName=" + firstName +
+                        ", lastName=" + lastName +
+                        ", birthYear=" + birthYear +
+                        ", job=" + job +
+                        ", salary=" + salary +
+                        ", id=" + id;
     }
 
     public String getFirstName() {
@@ -64,19 +89,4 @@ public class Person {
     public void setJob(PersonJob job) {
         this.job = job;
     }
-
-    public static PersonJob setVariableJob(String inputJob) throws PersonException {
-        if (inputJob == null || inputJob.isBlank()) {
-       //     this.job = PersonJob.UNKNOWN;
-            return PersonJob.UNKNOWN;
-        }
-        for(PersonJob job : PersonJob.values()){
-            if (job.toString().equalsIgnoreCase(inputJob)) {
-     //           this.job = job;
-                return job;
-            }
-        }
-        throw new PersonException("No such job.");
-    }
-
 }

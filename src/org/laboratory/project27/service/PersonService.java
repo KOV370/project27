@@ -59,11 +59,12 @@ public class PersonService {
         if (salary != 0)
             correctSalary = salary;
         else correct = false;
+        int id = 1;//todo  организовать автоматический ввод id по порядку
         if (!correct) {
             System.out.println("New person did not created");
             return null;
         } else {
-            person = new Person(firstName, lastName, birthYear_1, job, correctSalary);
+            person = new Person(firstName, lastName, birthYear_1, job, correctSalary, id);
         }
         return person;
     }
@@ -85,8 +86,6 @@ public class PersonService {
         Person person = repository.getPersonByName(name);
         if (person == null) {
             System.out.println("Person not found");
-        } else {
-            System.out.println(person);
         }
         return person;
     }

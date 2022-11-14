@@ -15,7 +15,7 @@ public class PersonFileRepository {
         try {
             fileWriter.write(person.getFirstName() + "#" + person.getLastName() + "#"
                     + person.getBirthYear() + "#" + person.getJob() + "#" +
-                    person.getSalary() + "#" + "\n");
+                    person.getSalary() + "#" + person.getId() + "#" + "\n");
             fileWriter.close();
             System.out.println("Data added successfully");
         } catch (IOException e) {
@@ -47,7 +47,8 @@ public class PersonFileRepository {
         int birthYear = Integer.parseInt(txt[2]);
         PersonJob job = PersonJob.valueOf(txt[3]);
         double salary = Double.parseDouble(txt[4]);
-        return new Person(firstName, lastName, birthYear, job, salary);
+        int id = Integer.parseInt(txt[5]);
+        return new Person(firstName, lastName, birthYear, job, salary, id);
     }
 }
 

@@ -39,12 +39,13 @@ public class RunProgram {
 
     private boolean choiceMenu() {
         ui.printMessage("==============================");
-        ui.printMessage("Current person is: " + currentPerson);
+
         int numberMenu = ui.readInt("Make your choice");
         {
             switch (numberMenu) {
                 case 1:
                     createPerson();
+                    ui.printMessage("Current person is: " + currentPerson);
                     break;
 
                 case 2:
