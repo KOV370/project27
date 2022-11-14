@@ -1,27 +1,14 @@
 package org.laboratory.project27.repository;
 
 import org.laboratory.project27.model.Person;
+import org.laboratory.project27.model.PersonException;
 import org.laboratory.project27.model.PersonJob;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class PersonFileRepository {
     public static final String FILE = "C:\\JetBrains Projects\\Project27_laboratory.txt";
 
-    public static void printToFife(FileWriter fileWriter, Person person) {
-        try {
-            fileWriter.write(person.getFirstName() + "#" + person.getLastName() + "#"
-                    + person.getBirthYear() + "#" + person.getJob() + "#" +
-                    person.getSalary() + "#" + person.getId() + "#" + "\n");
-            fileWriter.close();
-            System.out.println("Data added successfully");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public Person getPersonByName(String name) {
         Person person;
@@ -49,6 +36,22 @@ public class PersonFileRepository {
         double salary = Double.parseDouble(txt[4]);
         int id = Integer.parseInt(txt[5]);
         return new Person(firstName, lastName, birthYear, job, salary, id);
+    }
+
+    public Person getPersonById(String id) {//todo сделать метод
+        return null;
+    }
+
+    public Person create(Person person) {
+        try (FileWriter fileWriter = new FileWriter(FILE, true)) {
+            fileWriter.write(person.getFirstName() + "#" + person.getLastName() + "#"
+                    + person.getBirthYear() + "#" + person.getJob() + "#" +
+                    person.getSalary() + "#" + person.getId() + "#" + "\n");
+            return person;
+        } catch (IOException ex) {
+            System.err.println(ex);
+            return null;
+        }
     }
 }
 

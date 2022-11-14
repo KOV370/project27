@@ -19,7 +19,7 @@ public class RunProgram {
     private final PersonService personService;
     private Person currentPerson;
 
-    public RunProgram() { //todo почему объекты создаются в конструкторе?
+    public RunProgram() {
         ui = new ConsoleUserDialog();
         personFileRepository = new PersonFileRepository();
         personService = new PersonService(ui, personFileRepository);
@@ -69,11 +69,8 @@ public class RunProgram {
     }
 
     private void savePerson() {
-        try {
-            PersonService.writeToTheDocument(PersonFileRepository.FILE, currentPerson, true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }}
+        personService.add(currentPerson);
+    }
 
     private void findPersonByName() {
         Person person = personService.getPersonByName(ui.enterString("Enter the name for downloading."));
