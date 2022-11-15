@@ -14,7 +14,7 @@ public class ConsoleUserDialog {
                 isError = false;
                 x = Integer.parseInt(enterString(message));
             } catch (NumberFormatException e) {
-                System.out.println("Wrong format int");
+                printMessage("Wrong format int");
                 isError = true;
             }
         } while (isError);

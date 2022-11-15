@@ -19,12 +19,12 @@ public class Person {
 
     public static PersonJob setVariableJob(String inputJob) throws PersonException {
         if (inputJob == null || inputJob.isBlank()) {
-            //     this.job = PersonJob.UNKNOWN;
+              //  this.job = PersonJob.UNKNOWN;
             return PersonJob.UNKNOWN;
         }
         for (PersonJob job : PersonJob.values()) {
-            if (job.toString().equalsIgnoreCase(inputJob)) {
-                //           this.job = job;
+            if (job.toString().equalsIgnoreCase(inputJob)) {//todo перестало работать сравнение, при любом вводе пишет UNKNOWN
+                   //       this.job = job;
                 return job;
             } else return PersonJob.UNKNOWN;
         }

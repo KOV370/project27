@@ -39,7 +39,6 @@ public class RunProgram {
 
     private boolean choiceMenu() {
         ui.printMessage("==============================");
-
         int numberMenu = ui.readInt("Make your choice");
         {
             switch (numberMenu) {

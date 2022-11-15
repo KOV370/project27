@@ -9,16 +9,10 @@ import org.laboratory.project27.repository.PersonFileRepository;
 public class PersonService {
     private static final String namePersonJob = """
             Enter person job from the list:
-            DIRECTOR
-            MANAGER
-            DRIVER
-            SELLER
-            LOADER
-            OFFICE_MANAGER""";
+            DIRECTOR, MANAGER, DRIVER, SELLER, LOADER, OFFICE_MANAGER""";
     private ConsoleUserDialog ui;
     private PersonFileRepository repository;
 
-    //todo что означает этот конструктор?
     public PersonService(ConsoleUserDialog ui, PersonFileRepository repository) {
         this.ui = ui;
         this.repository = repository;
@@ -35,30 +29,34 @@ public class PersonService {
     }
 
     public Person createNewPerson() {
-        Person person;
-        boolean correct = true;
-        double correctSalary = 0.0;
+        Person person ;
         String firstName = getValidatedString("Enter First Name");
         String lastName = getValidatedString("Enter last name");
         int birthYear = enterBirthYear();
         PersonJob job = null;
         try {
-            job = Person.setVariableJob(getValidatedString("Enter job:"));
+            job = Person.setVariableJob(getValidatedString(namePersonJob));
         } catch (PersonException e) {
             ui.printMessage("Wrong job");
         }
-        double salary = ui.readDouble("Set the salary.");//todo сделать по аналогии с годом
-        if (salary != 0)
-            correctSalary = salary;//todo удалить
-        else correct = false;//todo удалить
+        double salary = enterSalary();
         int id = 1;//todo  организовать автоматический ввод id по порядку
-        if (!correct) {
-            System.out.println("New person did not created");
-            return null;
-        } else {
-            person = new Person(firstName, lastName, birthYear, job, correctSalary, id);
-        }
+        person = new Person(firstName, lastName, birthYear, job, salary, id);
         return person;
+    }
+
+    private double enterSalary() {
+        double salary = 0d;
+        boolean isError ;
+        do {
+            try {
+                isError = false;
+                salary = ui.readDouble("Set the salary.");
+            } catch (NumberFormatException ex) {
+                isError = true;
+            }
+        } while (isError);
+        return salary;
     }
 
     private int enterBirthYear() {
@@ -94,7 +92,7 @@ public class PersonService {
     public Person getPersonByName(String name) {
         Person person = repository.getPersonByName(name);
         if (person == null) {
-            System.out.println("Person not found");
+            ui.printMessage("Person not found");
         }
         return person;
     }
