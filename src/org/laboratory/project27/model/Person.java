@@ -8,23 +8,23 @@ public class Person {
     private double salary;
     private int id;
 
-    public Person(String firstName, String lastName, int birthYear, PersonJob job, double salary, int id) {
+    public Person(int id, String firstName, String lastName, int birthYear, PersonJob job, double salary) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthYear = birthYear;
         this.job = job;
         this.salary = salary;
-        this.id = id;
     }
 
     public static PersonJob setVariableJob(String inputJob) throws PersonException {
         if (inputJob == null || inputJob.isBlank()) {
-              //  this.job = PersonJob.UNKNOWN;
+            //  this.job = PersonJob.UNKNOWN;
             return PersonJob.UNKNOWN;
         }
         for (PersonJob job : PersonJob.values()) {
             if (job.toString().equalsIgnoreCase(inputJob)) {//todo перестало работать сравнение, при любом вводе пишет UNKNOWN
-                   //       this.job = job;
+                //       this.job = job;
                 return job;
             } else return PersonJob.UNKNOWN;
         }
@@ -50,12 +50,13 @@ public class Person {
     @Override
     public String toString() {
         return
-                "firstName=" + firstName +
+                "id=" + id +
+                        ", firstName=" + firstName +
                         ", lastName=" + lastName +
                         ", birthYear=" + birthYear +
                         ", job=" + job +
-                        ", salary=" + salary +
-                        ", id=" + id;
+                        ", salary=" + salary;
+
     }
 
     public String getFirstName() {

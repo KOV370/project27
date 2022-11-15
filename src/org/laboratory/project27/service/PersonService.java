@@ -29,7 +29,8 @@ public class PersonService {
     }
 
     public Person createNewPerson() {
-        Person person ;
+        Person person;
+        int id = createId();
         String firstName = getValidatedString("Enter First Name");
         String lastName = getValidatedString("Enter last name");
         int birthYear = enterBirthYear();
@@ -40,14 +41,19 @@ public class PersonService {
             ui.printMessage("Wrong job");
         }
         double salary = enterSalary();
-        int id = 1;//todo  организовать автоматический ввод id по порядку
-        person = new Person(firstName, lastName, birthYear, job, salary, id);
+        person = new Person(id, firstName, lastName, birthYear, job, salary);
         return person;
+    }
+
+    private int createId() {
+        int id = repository.getID() + 1;
+        repository.enterID(id);
+        return id;
     }
 
     private double enterSalary() {
         double salary = 0d;
-        boolean isError ;
+        boolean isError;
         do {
             try {
                 isError = false;
