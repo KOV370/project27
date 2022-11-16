@@ -96,7 +96,7 @@ public class PersonService {
     }
 
     public Person getPersonByName(String name) {
-        Person person = repository.getPersonByName(name);
+        Person person = repository.getPersonByName(name, 1);
         if (person == null) {
             ui.printMessage("Person not found");
         }
@@ -104,9 +104,9 @@ public class PersonService {
     }
 
     public Person getPersonById(String id) {
-        Person person = repository.getPersonById(id);
+        Person person = repository.getPersonByName(id,2);
         if (person == null) {
-            System.out.println("Person not found");
+            ui.printMessage("ID not found");
         }
         return person;
     }

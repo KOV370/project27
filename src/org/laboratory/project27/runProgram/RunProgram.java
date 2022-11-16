@@ -12,7 +12,8 @@ public class RunProgram {
             Menu
             1-create new record from console
             2-save record to the file
-            3-find record from the file
+            3-find record from the file by name
+            4-find record from the file by ID
             9-exit""";
     private final ConsoleUserDialog ui;
     private final PersonFileRepository personFileRepository;
@@ -53,6 +54,9 @@ public class RunProgram {
                 case 3:
                     findPersonByName();
                     break;
+                case 4:
+                    findPersonByID();
+                    break;
                 case 9:
                     return PROGRAM_EXIT;
                 default:
@@ -60,6 +64,13 @@ public class RunProgram {
                     break;
             }
             return CONTINUE_EXECUTION;
+        }
+    }
+
+    private void findPersonByID() {
+        Person person = personService.getPersonById(ui.enterString("Enter the ID for downloading."));
+        if (person != null) {
+            ui.printMessage(person.toString());
         }
     }
 
@@ -73,9 +84,8 @@ public class RunProgram {
 
     private void findPersonByName() {
         Person person = personService.getPersonByName(ui.enterString("Enter the name for downloading."));
-        if (person == null) {
-            ui.printMessage("Person not found");
-        } else {
+        if (person != null) {
+            ;
             ui.printMessage(person.toString());
         }
     }
