@@ -10,10 +10,8 @@ public class RunProgram {
     public static final boolean CONTINUE_EXECUTION = true;
     private static final String MENU = """
             Menu
-            1-create new record from console
-            2-save record to the file
-            3-find record from the file by name
-            4-find record from the file by ID
+            1-create new record from console, 2-save record to the file
+            3-find record from the file by name, 4-find record from the file by ID
             9-exit""";
     private final ConsoleUserDialog ui;
     private final PersonFileRepository personFileRepository;
@@ -79,7 +77,10 @@ public class RunProgram {
     }
 
     private void savePerson() {
-        personService.add(currentPerson);
+        if(currentPerson != null){
+        personService.add(currentPerson);}
+        else
+            ui.printMessage("Create person for saving.");
     }
 
     private void findPersonByName() {

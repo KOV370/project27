@@ -5,6 +5,7 @@ import org.laboratory.project27.model.Person;
 import org.laboratory.project27.model.PersonException;
 import org.laboratory.project27.model.PersonJob;
 import org.laboratory.project27.repository.PersonFileRepository;
+import org.laboratory.project27.runProgram.RunProgram;
 
 public class PersonService {
     private static final String namePersonJob = """
@@ -19,11 +20,12 @@ public class PersonService {
     }
 
     public Person add(Person input) {
-        Person person = repository.create(input);//todo add ID
+        Person person = repository.create(input);
         if (person == null) {
             ui.printMessage("Can not create the person");
         } else {
             ui.printMessage("Person saved successfully");
+            repository.enterID(person.getId()); //перенес запись ID при подтверждении записи клиента
         }
         return person;
     }
@@ -47,7 +49,7 @@ public class PersonService {
 
     private int createId() {
         int id = repository.getID() + 1;
-        repository.enterID(id);
+  //      repository.enterID(id);
         return id;
     }
 
@@ -104,10 +106,13 @@ public class PersonService {
     }
 
     public Person getPersonById(String id) {
-        Person person = repository.getPersonByName(id,2);
+        Person person = repository.getPersonByName(id, 2);
         if (person == null) {
             ui.printMessage("ID not found");
         }
         return person;
     }
+
+
+
 }

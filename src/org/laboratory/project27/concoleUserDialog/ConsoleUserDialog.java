@@ -8,13 +8,14 @@ public class ConsoleUserDialog {
 
     public int readInt(String message) {
         int x = 0;
-        boolean isError;
+        boolean isError = false;
         do {
             try {
                 isError = false;
                 x = Integer.parseInt(enterString(message));
             } catch (NumberFormatException e) {
                 printMessage("Wrong format int");
+         //       exitProgram(isError);
                 isError = true;
             }
         } while (isError);
@@ -44,6 +45,12 @@ public class ConsoleUserDialog {
 
     public void printMessage(String message) {
         System.out.println(message);
+    }
+
+    public void exitProgram(boolean isError) {
+        System.out.println("9 - exit, other - continue. Make your choice:");
+        int numberMenu = scanner.nextInt();
+        if (numberMenu == 9) {System.exit(0);}
     }
 
 }
