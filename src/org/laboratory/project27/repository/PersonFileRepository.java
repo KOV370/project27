@@ -11,7 +11,7 @@ public class PersonFileRepository {
     public static final String FILE = "C:\\JetBrains Projects\\Project27_laboratory.txt";
     public static final String FILE_PERSON_LAST_ID = "C:\\JetBrains Projects\\Project27_lastID.txt";
 
-    public Person getPersonByName(String name) {
+    public Person findPersonByName(String name) {
         List<String> lines = getLines();
         for (String line : lines) {
             Person person = extractPerson(line);
@@ -36,7 +36,7 @@ public class PersonFileRepository {
         return lines;
     }
 
-    public Person getPersonById(String id) {
+    public Person findPersonById(String id) {
         List<String> lines = getLines();
         for (String line : lines) {
             Person person = extractPerson(line);
@@ -45,6 +45,16 @@ public class PersonFileRepository {
             }
         }
         return null;
+    }
+
+    public List<Person> findAll() {
+        List<Person> persons = new ArrayList<>();
+        List<String> lines = getLines();
+        for (String line : lines) {
+            Person person = extractPerson(line);
+            persons.add(person);
+        }
+        return persons;
     }
 
     public Person extractPerson(String line) {

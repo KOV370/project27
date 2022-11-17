@@ -5,6 +5,8 @@ import org.laboratory.project27.model.Person;
 import org.laboratory.project27.model.PersonJob;
 import org.laboratory.project27.repository.PersonFileRepository;
 
+import java.util.List;
+
 public class PersonService { //todo получить из Person Job  эта константа не нужна
     private static final String NAME_PERSON_JOB = """  
             Enter person job from the list:
@@ -93,7 +95,7 @@ public class PersonService { //todo получить из Person Job  эта к�
     }
 
     public Person getPersonByName(String name) {
-        Person person = repository.getPersonByName(name);
+        Person person = repository.findPersonByName(name);
         if (person == null) {
             ui.printMessage("Person not found");
         }
@@ -101,10 +103,14 @@ public class PersonService { //todo получить из Person Job  эта к�
     }
 
     public Person getPersonById(String id) {
-        Person person = repository.getPersonById(id);
+        Person person = repository.findPersonById(id);
         if (person == null) {
             ui.printMessage("ID not found");
         }
         return person;
+    }
+
+    public List<Person> findAll() {
+        return repository.findAll();
     }
 }

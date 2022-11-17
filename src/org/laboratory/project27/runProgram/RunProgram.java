@@ -5,6 +5,8 @@ import org.laboratory.project27.model.Person;
 import org.laboratory.project27.repository.PersonFileRepository;
 import org.laboratory.project27.service.PersonService;
 
+import java.util.List;
+
 public class RunProgram {
     public static final boolean PROGRAM_EXIT = false;
     public static final boolean CONTINUE_EXECUTION = true;
@@ -12,7 +14,7 @@ public class RunProgram {
             Menu
             1-create new record from console, 2-save record to the file
             3-find record from the file by name, 4-find record from the file by ID
-            9-exit""";
+            5 - find all persons, 9-exit""";
     private final ConsoleUserDialog ui;
     private final PersonFileRepository personFileRepository;
     private final PersonService personService;
@@ -45,7 +47,6 @@ public class RunProgram {
                     createPerson();
                     ui.printMessage("Current person is: " + currentPerson);
                     break;
-
                 case 2:
                     savePerson();
                     break;
@@ -55,6 +56,9 @@ public class RunProgram {
                 case 4:
                     findPersonByID();
                     break;
+                case 5:
+                    findAllPersons();
+                    break;
                 case 9:
                     return PROGRAM_EXIT;
                 default:
@@ -62,6 +66,13 @@ public class RunProgram {
                     break;
             }
             return CONTINUE_EXECUTION;
+        }
+    }
+
+    private void findAllPersons() {
+        List<Person> persons = personService.findAll();
+        for (Person person : persons) {
+            ui.printMessage(person.toString());
         }
     }
 
