@@ -2,13 +2,11 @@ package org.laboratory.project27.service;
 
 import org.laboratory.project27.concoleUserDialog.ConsoleUserDialog;
 import org.laboratory.project27.model.Person;
-import org.laboratory.project27.model.PersonException;
 import org.laboratory.project27.model.PersonJob;
 import org.laboratory.project27.repository.PersonFileRepository;
-import org.laboratory.project27.runProgram.RunProgram;
 
-public class PersonService {
-    private static final String namePersonJob = """
+public class PersonService { //todo получить из Person Job  эта константа не нужна
+    private static final String NAME_PERSON_JOB = """  
             Enter person job from the list:
             DIRECTOR, MANAGER, DRIVER, SELLER, LOADER, OFFICE_MANAGER""";
     private ConsoleUserDialog ui;
@@ -25,30 +23,29 @@ public class PersonService {
             ui.printMessage("Can not create the person");
         } else {
             ui.printMessage("Person saved successfully");
-            repository.enterID(person.getId()); //перенес запись ID при подтверждении записи клиента
+            repository.saveID(person.getId()); //перенес запись ID при подтверждении записи клиента
         }
         return person;
     }
 
     public Person createNewPerson() {
         Person person;
-        int id = createId();
+        String id = incrementId();
         String firstName = getValidatedString("Enter First Name");
         String lastName = getValidatedString("Enter last name");
         int birthYear = enterBirthYear();
-        PersonJob job = null;
+        PersonJob job;
 
-            job = Person.setVariableJob(ui.enterString(namePersonJob));
+        job = Person.setVariableJob(ui.enterString(NAME_PERSON_JOB));
 
         double salary = enterSalary();
         person = new Person(id, firstName, lastName, birthYear, job, salary);
         return person;
     }
 
-    private int createId() {
-        int id = repository.getID() + 1;
-  //      repository.enterID(id);
-        return id;
+    private String incrementId() {
+        int id = Integer.parseInt(repository.getLastId()) + 1;
+        return String.valueOf(id);
     }
 
     private double enterSalary() {
@@ -96,7 +93,7 @@ public class PersonService {
     }
 
     public Person getPersonByName(String name) {
-        Person person = repository.getPersonByName(name, 1);
+        Person person = repository.getPersonByName(name);
         if (person == null) {
             ui.printMessage("Person not found");
         }
@@ -104,13 +101,10 @@ public class PersonService {
     }
 
     public Person getPersonById(String id) {
-        Person person = repository.getPersonByName(id, 2);
+        Person person = repository.getPersonById(id);
         if (person == null) {
             ui.printMessage("ID not found");
         }
         return person;
     }
-
-
-
 }

@@ -7,24 +7,34 @@ import java.io.*;
 
 public class PersonFileRepository {
     public static final String FILE = "C:\\JetBrains Projects\\Project27_laboratory.txt";
-    public static final String FILELASTID = "C:\\JetBrains Projects\\Project27_lastID.txt";
+    public static final String FILE_PERSON_LAST_ID = "C:\\JetBrains Projects\\Project27_lastID.txt";
 
-    public Person getPersonByName(String name, int identificator) {
+    public Person getPersonByName(String name) {
         Person person;
         String line;
         try (BufferedReader bufferedReader = new BufferedReader
                 (new FileReader(PersonFileRepository.FILE))) {
             while ((line = bufferedReader.readLine()) != null && !line.isBlank()) {
                 person = extractPerson(line);
-                if (identificator == 1) {
-                    if (person.getFirstName().equals(name)) {
-                        return person;
-                    }
-                } else {
-                    if (String.valueOf(person.getId()).equals(name)) {
-                        return person;
-                    }
+                if (person.getFirstName().equals(name)) {
+                    return person;
                 }
+            }
+        } catch (IOException r) {
+            System.out.println("IOException");
+        }
+        return null;
+    }
+
+    public Person getPersonById(String id) {
+        Person person;
+        String line;
+        try (BufferedReader bufferedReader = new BufferedReader
+                (new FileReader(PersonFileRepository.FILE))) {
+            while ((line = bufferedReader.readLine()) != null && !line.isBlank()) {
+                person = extractPerson(line);
+                (person.getId()).equals(id);
+                return person;
             }
         } catch (IOException r) {
             System.out.println("IOException");
@@ -34,7 +44,7 @@ public class PersonFileRepository {
 
     public Person extractPerson(String line) {
         String[] txt = line.split("#");
-        int id = Integer.parseInt(txt[0]);
+        String id = txt[0];
         String firstName = txt[1];
         String lastName = txt[2];
         int birthYear = Integer.parseInt(txt[3]);
@@ -43,19 +53,14 @@ public class PersonFileRepository {
         return new Person(id, firstName, lastName, birthYear, job, salary);
     }
 
-    public int getID() {
-        BufferedReader bufferedReader = null;
-        int previousId = 0;
-        try {
-            bufferedReader = new BufferedReader(new FileReader(PersonFileRepository.FILELASTID));
+    public String getLastId() {
+        String previousId = null;
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(PersonFileRepository.FILE_PERSON_LAST_ID))) {
+            previousId = (bufferedReader.readLine());
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            previousId = Integer.parseInt(bufferedReader.readLine());
-            bufferedReader.close();
+            System.err.println("FileNotFoundException");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("IOException");
         }
         return previousId;
     }
@@ -72,9 +77,9 @@ public class PersonFileRepository {
         }
     }
 
-    public void enterID(int id) {
+    public void saveID(String id) {
         try {
-            FileWriter fileWriter = new FileWriter(FILELASTID, false);
+            FileWriter fileWriter = new FileWriter(FILE_PERSON_LAST_ID, false);
             fileWriter.write(String.valueOf(id));
             fileWriter.close();
         } catch (IOException e) {

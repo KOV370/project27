@@ -6,9 +6,9 @@ public class Person {
     private int birthYear;
     private PersonJob job;
     private double salary;
-    private int id;
+    private String id;
 
-    public Person(int id, String firstName, String lastName, int birthYear, PersonJob job, double salary) {
+    public Person(String id, String firstName, String lastName, int birthYear, PersonJob job, double salary) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -29,11 +29,11 @@ public class Person {
         return PersonJob.UNKNOWN;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

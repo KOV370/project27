@@ -77,16 +77,15 @@ public class RunProgram {
     }
 
     private void savePerson() {
-        if(currentPerson != null){
-        personService.add(currentPerson);}
-        else
+        if (currentPerson != null) {
+            personService.add(currentPerson);
+        } else
             ui.printMessage("Create person for saving.");
     }
 
     private void findPersonByName() {
         Person person = personService.getPersonByName(ui.enterString("Enter the name for downloading."));
         if (person != null) {
-            ;
             ui.printMessage(person.toString());
         }
     }

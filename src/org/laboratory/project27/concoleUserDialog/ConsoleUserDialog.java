@@ -15,7 +15,6 @@ public class ConsoleUserDialog {
                 x = Integer.parseInt(enterString(message));
             } catch (NumberFormatException e) {
                 printMessage("Wrong format int");
-//                exitProgram(isError);
                 isError = true;
             }
         } while (isError);
@@ -47,7 +46,7 @@ public class ConsoleUserDialog {
         System.out.println(message);
     }
 
-    public void exitProgram() {
+    public void exitProgram() {//todo перенасти в класс service ввод 0 - валидируется в сервисном классе
         System.out.println("9 - exit, other - continue. Make your choice:");
         int numberMenu = scanner.nextInt();
         if (numberMenu == 9) {
