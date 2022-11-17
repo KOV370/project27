@@ -17,18 +17,16 @@ public class Person {
         this.salary = salary;
     }
 
-    public static PersonJob setVariableJob(String inputJob) throws PersonException {
+    public static PersonJob setVariableJob(String inputJob) {
         if (inputJob == null || inputJob.isBlank()) {
-            //  this.job = PersonJob.UNKNOWN;
             return PersonJob.UNKNOWN;
         }
         for (PersonJob job : PersonJob.values()) {
-            if (job.toString().equalsIgnoreCase(inputJob)) {//todo перестало работать сравнение, при любом вводе пишет UNKNOWN
-                //       this.job = job;
+            if (job.toString().equalsIgnoreCase(inputJob)) {
                 return job;
-            } else return PersonJob.UNKNOWN;
+            }
         }
-        throw new PersonException("No such job.");
+        return PersonJob.UNKNOWN;
     }
 
     public int getId() {

@@ -15,7 +15,7 @@ public class ConsoleUserDialog {
                 x = Integer.parseInt(enterString(message));
             } catch (NumberFormatException e) {
                 printMessage("Wrong format int");
-         //       exitProgram(isError);
+//                exitProgram(isError);
                 isError = true;
             }
         } while (isError);
@@ -47,10 +47,12 @@ public class ConsoleUserDialog {
         System.out.println(message);
     }
 
-    public void exitProgram(boolean isError) {
+    public void exitProgram() {
         System.out.println("9 - exit, other - continue. Make your choice:");
         int numberMenu = scanner.nextInt();
-        if (numberMenu == 9) {System.exit(0);}
+        if (numberMenu == 9) {
+            System.exit(0);
+        }
     }
 
 }

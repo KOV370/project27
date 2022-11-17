@@ -37,11 +37,9 @@ public class PersonService {
         String lastName = getValidatedString("Enter last name");
         int birthYear = enterBirthYear();
         PersonJob job = null;
-        try {
-            job = Person.setVariableJob(getValidatedString(namePersonJob));
-        } catch (PersonException e) {
-            ui.printMessage("Wrong job");
-        }
+
+            job = Person.setVariableJob(ui.enterString(namePersonJob));
+
         double salary = enterSalary();
         person = new Person(id, firstName, lastName, birthYear, job, salary);
         return person;
