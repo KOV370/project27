@@ -4,40 +4,45 @@ import org.laboratory.project27.model.Person;
 import org.laboratory.project27.model.PersonJob;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PersonFileRepository {
     public static final String FILE = "C:\\JetBrains Projects\\Project27_laboratory.txt";
     public static final String FILE_PERSON_LAST_ID = "C:\\JetBrains Projects\\Project27_lastID.txt";
 
     public Person getPersonByName(String name) {
-        Person person;
-        String line;
-        try (BufferedReader bufferedReader = new BufferedReader
-                (new FileReader(PersonFileRepository.FILE))) {
-            while ((line = bufferedReader.readLine()) != null && !line.isBlank()) {
-                person = extractPerson(line);
-                if (person.getFirstName().equals(name)) {
-                    return person;
-                }
+        List<String> lines = getLines();
+        for (String line : lines) {
+            Person person = extractPerson(line);
+            if (person.getFirstName().equals(name)) {
+                return person;
             }
-        } catch (IOException r) {
-            System.out.println("IOException");
         }
         return null;
     }
 
-    public Person getPersonById(String id) {
-        Person person;
+    private List<String> getLines() {
+        List<String> lines = new ArrayList<>();
         String line;
         try (BufferedReader bufferedReader = new BufferedReader
                 (new FileReader(PersonFileRepository.FILE))) {
             while ((line = bufferedReader.readLine()) != null && !line.isBlank()) {
-                person = extractPerson(line);
-                (person.getId()).equals(id);
-                return person;
+                lines.add(line);
             }
         } catch (IOException r) {
             System.out.println("IOException");
+        }
+        return lines;
+    }
+
+    public Person getPersonById(String id) {
+        List<String> lines = getLines();
+        for (String line : lines) {
+            Person person = extractPerson(line);
+            if (person.getId().equals(id)) {
+                return person;
+            }
         }
         return null;
     }
