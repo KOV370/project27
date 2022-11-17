@@ -38,7 +38,7 @@ public class RunProgram {
         } while (continueExecution);
     }
 
-    private boolean choiceMenu() {
+    private boolean choiceMenu() { //todo добавить метод update delete  поиск по ID, сначала сделать показ выбранного поля
         ui.printMessage("==============================");
         int numberMenu = ui.readInt("Make your choice");
         {
@@ -77,9 +77,9 @@ public class RunProgram {
     }
 
     private void findPersonByID() {
-        Person person = personService.getPersonById(ui.enterString("Enter the ID for downloading."));
-        if (person != null) {
-            ui.printMessage(person.toString());
+        currentPerson = personService.getPersonById(ui.enterString("Enter the ID for downloading."));
+        if (currentPerson != null) {
+            ui.printMessage(currentPerson.toString());
         }
     }
 
@@ -95,9 +95,9 @@ public class RunProgram {
     }
 
     private void findPersonByName() {
-        Person person = personService.getPersonByName(ui.enterString("Enter the name for downloading."));
-        if (person != null) {
-            ui.printMessage(person.toString());
+        currentPerson = personService.getPersonByName(ui.enterString("Enter the name for downloading."));
+        if (currentPerson != null) {
+            ui.printMessage(currentPerson.toString());
         }
     }
 }
