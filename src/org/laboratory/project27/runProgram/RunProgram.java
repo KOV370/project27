@@ -38,7 +38,7 @@ public class RunProgram {
         } while (continueExecution);
     }
 
-    private boolean choiceMenu() { //todo добавить метод update delete  поиск по ID, сначала сделать показ выбранного поля
+    private boolean choiceMenu() {
         ui.printMessage("==============================");
         int numberMenu = ui.readInt("Make your choice");
         {

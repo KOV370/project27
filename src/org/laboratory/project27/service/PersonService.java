@@ -6,18 +6,20 @@ import org.laboratory.project27.model.PersonComparator;
 import org.laboratory.project27.model.PersonJob;
 import org.laboratory.project27.repository.PersonFileRepository;
 
+import java.util.Arrays;
 import java.util.List;
 
-public class PersonService { //todo получить из Person Job  эта константа не нужна
-    private static final String NAME_PERSON_JOB = """  
-            Enter person job from the list:
-            DIRECTOR, MANAGER, DRIVER, SELLER, LOADER, OFFICE_MANAGER""";
+public class PersonService {
     private ConsoleUserDialog ui;
     private PersonFileRepository repository;
 
     public PersonService(ConsoleUserDialog ui, PersonFileRepository repository) {
         this.ui = ui;
         this.repository = repository;
+    }
+
+    public String catalogPersonJobs() {
+        return "Enter person job from the list:" + Arrays.toString(PersonJob.values());
     }
 
     public Person add(Person input) {
@@ -38,7 +40,7 @@ public class PersonService { //todo получить из Person Job  эта к�
         String lastName = getValidatedString("Enter last name");
         int birthYear = enterBirthYear();
         PersonJob job;
-        job = Person.setVariableJob(ui.enterString(NAME_PERSON_JOB));
+        job = Person.setVariableJob(ui.enterString(catalogPersonJobs()));
         double salary = enterSalary();
         person = new Person(id, firstName, lastName, birthYear, job, salary);
         return person;
@@ -56,6 +58,7 @@ public class PersonService { //todo получить из Person Job  эта к�
             try {
                 isError = false;
                 salary = ui.readDouble("Set the salary.");
+                exitProgram((int) salary);
             } catch (NumberFormatException ex) {
                 isError = true;
             }
@@ -67,6 +70,7 @@ public class PersonService { //todo получить из Person Job  эта к�
         int birthYear;
         do {
             birthYear = ui.readInt("Enter birthYear");
+            exitProgram(birthYear);
         } while (!isValid(birthYear));
         return birthYear;
     }
@@ -152,9 +156,10 @@ public class PersonService { //todo получить из Person Job  эта к�
                     String confirm = ui.enterString("1-for confirming updating, other-cancel updating");
                     if (Integer.valueOf(confirm) == 1) {
                         personList.remove(personList.get(indexPerson));
-                        createUpdatedPerson(id);
+                        personList.add(createUpdatedPerson(id));
                         personList.sort(personComparator);
                         repository.saveList(personList);
+                        ui.printMessage("ID " + id + " has updated successfully");
                         break;
                     } else break;
                 }
@@ -171,10 +176,16 @@ public class PersonService { //todo получить из Person Job  эта к�
         String lastName = getValidatedString("Enter last name");
         int birthYear = enterBirthYear();
         PersonJob job;
-        job = Person.setVariableJob(ui.enterString(NAME_PERSON_JOB));
+        job = Person.setVariableJob(ui.enterString(catalogPersonJobs()));
         double salary = enterSalary();
         person = new Person(id, firstName, lastName, birthYear, job, salary);
         return person;
+    }
+
+    public void exitProgram(int zero) {
+        if (zero == 0) {
+            System.exit(0);
+        }
     }
 }
 

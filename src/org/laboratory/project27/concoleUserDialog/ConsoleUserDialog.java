@@ -8,13 +8,14 @@ public class ConsoleUserDialog {
 
     public int readInt(String message) {
         int x = 0;
-        boolean isError = false;
+        boolean isError;
         do {
             try {
                 isError = false;
                 x = Integer.parseInt(enterString(message));
             } catch (NumberFormatException e) {
                 printMessage("Wrong format int");
+                printMessage("0-exit");
                 isError = true;
             }
         } while (isError);
@@ -22,7 +23,7 @@ public class ConsoleUserDialog {
     }
 
     public String enterString(String message) {
-        System.out.println(message);
+        printMessage(message);
         return scanner.nextLine();
     }
 
@@ -34,7 +35,8 @@ public class ConsoleUserDialog {
                 isError = false;
                 d = Double.parseDouble(enterString(message));
             } catch (NumberFormatException e) {
-                System.out.println("Wrong format double");
+                printMessage("Wrong format double");
+                printMessage("0-exit");
                 isError = true;
             }
         }
@@ -46,11 +48,5 @@ public class ConsoleUserDialog {
         System.out.println(message);
     }
 
-    public void exitProgram() {//todo перенасти в класс service ввод 0 - валидируется в сервисном классе
-        System.out.println("9 - exit, other - continue. Make your choice:");
-        int numberMenu = scanner.nextInt();
-        if (numberMenu == 9) {
-            System.exit(0);
-        }
-    }
+
 }

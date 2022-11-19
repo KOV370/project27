@@ -94,10 +94,8 @@ public class PersonFileRepository {
     }
 
     public void saveID(String id) {
-        try {
-            FileWriter fileWriter = new FileWriter(FILE_PERSON_LAST_ID, false);
+        try(FileWriter fileWriter = new FileWriter(FILE_PERSON_LAST_ID, false);) {
             fileWriter.write(String.valueOf(id));
-            fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
