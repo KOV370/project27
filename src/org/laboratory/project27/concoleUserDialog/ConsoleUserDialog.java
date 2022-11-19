@@ -53,5 +53,4 @@ public class ConsoleUserDialog {
             System.exit(0);
         }
     }
-
 }

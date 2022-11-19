@@ -5,6 +5,7 @@ import org.laboratory.project27.model.PersonJob;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 public class PersonFileRepository {
@@ -99,6 +100,18 @@ public class PersonFileRepository {
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void saveList(List<Person> personList) {
+        try (FileWriter fileWriter = new FileWriter(FILE, false)) {
+            for (Person person : personList) {
+                fileWriter.write(person.getId() + "#" + person.getFirstName() + "#" + person.getLastName() + "#"
+                        + person.getBirthYear() + "#" + person.getJob() + "#" +
+                        person.getSalary() + "#" + "\n");
+            }
+        } catch (IOException ex) {
+            System.err.println(ex);
         }
     }
 }

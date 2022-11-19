@@ -14,7 +14,7 @@ public class RunProgram {
             Menu
             1-create new record from console, 2-save record to the file
             3-find record from the file by name, 4-find record from the file by ID
-            5 - find all persons, 9-exit""";
+            5-find all persons, 6-update the person, 7-delete the person, 9-exit""";
     private final ConsoleUserDialog ui;
     private final PersonFileRepository personFileRepository;
     private final PersonService personService;
@@ -59,6 +59,12 @@ public class RunProgram {
                 case 5:
                     findAllPersons();
                     break;
+                case 6:
+                    updatePerson();
+                    break;
+                case 7:
+                    deletePerson();
+                    break;
                 case 9:
                     return PROGRAM_EXIT;
                 default:
@@ -67,6 +73,16 @@ public class RunProgram {
             }
             return CONTINUE_EXECUTION;
         }
+    }
+
+    private void deletePerson() {
+        if (!personService.deletePerson()) {
+            ui.enterString("ID did not find. Press enter.");
+        }
+    }
+
+    private void updatePerson() {
+        personService.updatePerson();
     }
 
     private void findAllPersons() {
