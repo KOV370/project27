@@ -130,7 +130,7 @@ public class PersonService {
                     String confirm = ui.enterString("1-for confirming deleting, other- cancel deleting");
                     if (Integer.valueOf(confirm) == 1) {
                         personList.remove(personList.get(indexPerson));
-                        personList.sort(personComparator);//todo не работает сортировка
+                        personList.sort(personComparator);
                         repository.saveList(personList);
                         successDelete = true;
                         break;
