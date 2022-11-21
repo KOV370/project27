@@ -97,7 +97,7 @@ public class PersonFileRepository {
         try(FileWriter fileWriter = new FileWriter(FILE_PERSON_LAST_ID, false);) {
             fileWriter.write(String.valueOf(id));
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); //todo а почему в других местах System.err.println(ex); ?
         }
     }
 
@@ -106,7 +106,8 @@ public class PersonFileRepository {
             for (Person person : personList) {
                 fileWriter.write(person.getId() + "#" + person.getFirstName() + "#" + person.getLastName() + "#"
                         + person.getBirthYear() + "#" + person.getJob() + "#" +
-                        person.getSalary() + "#" + "\n");
+                        person.getSalary() + "#" + "\n"); //todo дублирование когда с методом create() строка 86
+                // вынести доблиружщийся код в отдельный метод String convertPerson
             }
         } catch (IOException ex) {
             System.err.println(ex);

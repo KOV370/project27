@@ -15,7 +15,8 @@ public class ConsoleUserDialog {
                 x = Integer.parseInt(enterString(message));
             } catch (NumberFormatException e) {
                 printMessage("Wrong format int");
-                printMessage("0-exit");
+                printMessage("0-exit"); //todo это не сдесь должно быть, ConsoleUserDialog readInt должен быть
+                // универсальным, для каких-то случаев 0 может быть валидным значением, эта проверка делается в сервисе
                 isError = true;
             }
         } while (isError);
@@ -36,7 +37,7 @@ public class ConsoleUserDialog {
                 d = Double.parseDouble(enterString(message));
             } catch (NumberFormatException e) {
                 printMessage("Wrong format double");
-                printMessage("0-exit");
+                printMessage("0-exit"); //todo не должно быть тут
                 isError = true;
             }
         }

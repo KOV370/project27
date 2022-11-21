@@ -45,7 +45,8 @@ public class RunProgram {
             switch (numberMenu) {
                 case 1:
                     createPerson();
-                    ui.printMessage("Current person is: " + currentPerson);
+                    ui.printMessage("Current person is: " + currentPerson); //todo это улуче перенести в начало метода
+                    // чтобы после каждой операции (выбор любого пунка меню) выводило текущего person
                     break;
                 case 2:
                     savePerson();
@@ -60,7 +61,7 @@ public class RunProgram {
                     findAllPersons();
                     break;
                 case 6:
-                    updatePerson();
+                    updatePerson(); //todo думаю логичнее туда передавать currentPerson как параметр, его и будем апдейтить
                     break;
                 case 7:
                     deletePerson();
@@ -77,7 +78,8 @@ public class RunProgram {
 
     private void deletePerson() {
         if (!personService.deletePerson()) {
-            ui.enterString("ID did not find. Press enter.");
+            ui.enterString("ID did not find. Press enter."); // todo в общем случае мы не знаем почему не удалось удалить
+            // пользователя, толи id не найден, то сохранение в файл например не сработало
         }
     }
 
@@ -110,7 +112,8 @@ public class RunProgram {
             ui.printMessage("Create person for saving.");
     }
 
-    private void findPersonByName() {
+    private void findPersonByName() { //todo перенести этот метод рядом к методу findPersonByID
+        //первыми в классе идут методы find, потом 2 create, 3 update, 4 в конце delete
         currentPerson = personService.getPersonByName(ui.enterString("Enter the name for downloading."));
         if (currentPerson != null) {
             ui.printMessage(currentPerson.toString());

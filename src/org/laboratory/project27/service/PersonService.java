@@ -58,7 +58,8 @@ public class PersonService {
             try {
                 isError = false;
                 salary = ui.readDouble("Set the salary.");
-                exitProgram((int) salary);
+                exitProgram((int) salary); //todo использовать не exitProgram() a установить salary = 0d;
+                // а проверку что salary !=0 делать в вызывающем методе
             } catch (NumberFormatException ex) {
                 isError = true;
             }
@@ -70,7 +71,9 @@ public class PersonService {
         int birthYear;
         do {
             birthYear = ui.readInt("Enter birthYear");
-            exitProgram(birthYear);
+            exitProgram(birthYear); //todo плохой стиль использовать exitProgram(), в идеале exit должен быть только
+            // в одном месте в самом верхнем меню, в остальных случаях должна быть возможность диалога
+            // можно дать возможность указывать 0, тоогда это будет означать что пользователь не знает года рождения
         } while (!isValid(birthYear));
         return birthYear;
     }
@@ -122,12 +125,14 @@ public class PersonService {
         PersonComparator personComparator = new PersonComparator();
         String id = ui.enterString("Enter the ID for deleting");
         boolean successDelete = false;
-        for (int i = 0; i < personList.size(); i++) {
+        for (int i = 0; i < personList.size(); i++) { //todo лучше чтобы эта логика была на уровне repository а не в сервисе
+            // кроме вывода сообщений запроса пользователю, вопрос на уверены ли вы что хотите удалить должен заваться
+            // до того как начинаем искть. То есть в сервисе задаем вопрос удалить? если ответ Да, вызываем repository.delete(id)
             try {
                 if (personList.get(i).getId().equals(id)) {
                     int indexPerson = i;
                     ui.printMessage(personList.get(indexPerson).toString());
-                    String confirm = ui.enterString("1-for confirming deleting, other- cancel deleting");
+                    String confirm = ui.enterString("1-for confirming deleting, other- cancel deleting"); //todo использовать ui.readInt()
                     if (Integer.valueOf(confirm) == 1) {
                         personList.remove(personList.get(indexPerson));
                         personList.sort(personComparator);
@@ -136,8 +141,8 @@ public class PersonService {
                         break;
                     } else break;
                 }
-            } catch (NumberFormatException ex) {
-                break;
+            } catch (NumberFormatException ex) { // todo будет эксепшена, у нас есть метод readInt который обрабатывает эксепшены внутри
+                break; //todo что это
             }
         }
         return successDelete;
@@ -145,12 +150,15 @@ public class PersonService {
 
     public void updatePerson() {
         List<Person> personList = findAll();
-        PersonComparator personComparator = new PersonComparator();
+        PersonComparator personComparator = new PersonComparator(); //todo сортировку лучше реализовать не здесь а отдельным пунктом меню
+        // иначе непонятно, почему пользователь обновляет сотрудника, а при этом еще выполняется сортировка других сотридникв
+        // действие должно быть атомарным. и название метода должно совпадать с действием. два в одном (и сортировка и апдейд)
+        // лучше не делать
         String id = ui.enterString("Enter the ID for updating");
         int indexPerson;
         for (int i = 0; i < personList.size(); i++) {
             try {
-                if (personList.get(i).getId().equals(id)) {
+                if (personList.get(i).getId().equals(id)) { //todo те же самые замечания что и в методе delete person.
                     indexPerson = i;
                     ui.printMessage(personList.get(indexPerson).toString());
                     String confirm = ui.enterString("1-for confirming updating, other-cancel updating");
@@ -169,9 +177,11 @@ public class PersonService {
         }
     }
 
-    public Person createUpdatedPerson(String indexPerson) {
+    public Person createUpdatedPerson(String indexPerson) { //todo этот метод практически полностью дублирует метод createPerson()
+        // не должно быть дублирования кода, расположи методы рядом, посмотри на отличие, и нужно либо общую логику вынести
+        // в отдельный метод. либо добавить параметр boolean в метод который будет отличать вызываем create() или update()
         Person person;
-        String id = indexPerson;
+        String id = indexPerson; //todo зачем дублировать переменную?
         String firstName = getValidatedString("Enter First Name");
         String lastName = getValidatedString("Enter last name");
         int birthYear = enterBirthYear();
@@ -182,7 +192,7 @@ public class PersonService {
         return person;
     }
 
-    public void exitProgram(int zero) {
+    public void exitProgram(int zero) { //todo удалить
         if (zero == 0) {
             System.exit(0);
         }
