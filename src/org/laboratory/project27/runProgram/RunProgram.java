@@ -40,12 +40,18 @@ public class RunProgram {
 
     private boolean choiceMenu() {
         ui.printMessage("==============================");
+        String a = "1";
+        String b = "2";
+        int c = 3;
+        String x = c + "";
+        int y = c + Integer.parseInt(b);
+        String w = a + b;
+        System.out.println("int c + \"\" =String " + x + "; int c + Integer.parseInt(String b) =int " + y + "; String a + String b =String " + w);
         int numberMenu = ui.readInt("Make your choice");
         {
             switch (numberMenu) {
                 case 1:
                     createPerson();
-                    ui.printMessage("Current person is: " + currentPerson);
                     break;
                 case 2:
                     savePerson();
@@ -74,17 +80,6 @@ public class RunProgram {
             return CONTINUE_EXECUTION;
         }
     }
-
-    private void deletePerson() {
-        if (!personService.deletePerson()) {
-            ui.enterString("ID did not find. Press enter.");
-        }
-    }
-
-    private void updatePerson() {
-        personService.updatePerson();
-    }
-
     private void findAllPersons() {
         List<Person> persons = personService.findAll();
         for (Person person : persons) {
@@ -99,23 +94,36 @@ public class RunProgram {
         }
     }
 
-    private void createPerson() {
-        currentPerson = personService.createNewPerson();
-    }
-
-    private void savePerson() {
-        if (currentPerson != null) {
-            personService.add(currentPerson);
-        } else
-            ui.printMessage("Create person for saving.");
-    }
-
     private void findPersonByName() {
         currentPerson = personService.getPersonByName(ui.enterString("Enter the name for downloading."));
         if (currentPerson != null) {
             ui.printMessage(currentPerson.toString());
         }
     }
+
+    private void createPerson() {
+        currentPerson = personService.createNewPerson();
+        ui.printMessage("Current person is: " + currentPerson);
+    }
+
+    private void savePerson() {
+        if (currentPerson != null) {
+            personService.add(currentPerson);
+            ui.printMessage("Saved person is: " + currentPerson);
+        } else
+            ui.printMessage("Create person for saving.");
+    }
+
+    private void updatePerson() {
+        personService.updatePerson();
+    }
+
+    private void deletePerson() {
+        if (!personService.deletePerson()) {
+            ui.enterString("ID did not find. Press enter.");
+        }
+    }
+
 }
 
 

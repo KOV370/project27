@@ -46,6 +46,18 @@ public class PersonService {
         return person;
     }
 
+    public Person createUpdatedPerson(String id) {
+        Person person;
+        String firstName = getValidatedString("Enter First Name");
+        String lastName = getValidatedString("Enter last name");
+        int birthYear = enterBirthYear();
+        PersonJob job;
+        job = Person.setVariableJob(ui.enterString(catalogPersonJobs()));
+        double salary = enterSalary();
+        person = new Person(id, firstName, lastName, birthYear, job, salary);
+        return person;
+    }
+
     private String incrementId() {
         int id = Integer.parseInt(repository.getLastId()) + 1;
         return String.valueOf(id);
@@ -66,35 +78,8 @@ public class PersonService {
         return salary;
     }
 
-    private int enterBirthYear() {
-        int birthYear;
-        do {
-            birthYear = ui.readInt("Enter birthYear");
-            exitProgram(birthYear);
-        } while (!isValid(birthYear));
-        return birthYear;
-    }
-
-    private boolean isValid(int birthYear) {
-        if (birthYear < 1900 || birthYear > 2030) {
-            ui.printMessage("Year must be from 1900 till 2030");
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    private String getValidatedString(String message) {
-        String validatedString;
-        do {
-            validatedString = ui.enterString(message);
-        }
-        while (!validateName(validatedString));
-        return validatedString;
-    }
-
-    private boolean validateName(String inputString) {
-        return !inputString.matches(".*\\d+.*");
+    public List<Person> findAll() {
+        return repository.findAll();
     }
 
     public Person getPersonByName(String name) {
@@ -113,39 +98,39 @@ public class PersonService {
         return person;
     }
 
-    public List<Person> findAll() {
-        return repository.findAll();
+    private String getValidatedString(String message) {
+        String validatedString;
+        do {
+            validatedString = ui.enterString(message);
+        }
+        while (!validateName(validatedString));
+        return validatedString;
     }
 
-    public boolean deletePerson() {
-        List<Person> personList = findAll();
-        PersonComparator personComparator = new PersonComparator();
-        String id = ui.enterString("Enter the ID for deleting");
-        boolean successDelete = false;
-        for (int i = 0; i < personList.size(); i++) {
-            try {
-                if (personList.get(i).getId().equals(id)) {
-                    int indexPerson = i;
-                    ui.printMessage(personList.get(indexPerson).toString());
-                    String confirm = ui.enterString("1-for confirming deleting, other- cancel deleting");
-                    if (Integer.valueOf(confirm) == 1) {
-                        personList.remove(personList.get(indexPerson));
-                        personList.sort(personComparator);
-                        repository.saveList(personList);
-                        successDelete = true;
-                        break;
-                    } else break;
-                }
-            } catch (NumberFormatException ex) {
-                break;
-            }
+    private int enterBirthYear() {
+        int birthYear;
+        do {
+            birthYear = ui.readInt("Enter birthYear");
+            exitProgram(birthYear);
+        } while (!isValid(birthYear));
+        return birthYear;
+    }
+
+    private boolean isValid(int birthYear) {
+        if (birthYear < 1900 || birthYear > 2030) {
+            ui.printMessage("Year must be from 1900 till 2030");
+            return false;
+        } else {
+            return true;
         }
-        return successDelete;
+    }
+
+    private boolean validateName(String inputString) {
+        return !inputString.matches(".*\\d+.*");
     }
 
     public void updatePerson() {
         List<Person> personList = findAll();
-        PersonComparator personComparator = new PersonComparator();
         String id = ui.enterString("Enter the ID for updating");
         int indexPerson;
         for (int i = 0; i < personList.size(); i++) {
@@ -154,12 +139,14 @@ public class PersonService {
                     indexPerson = i;
                     ui.printMessage(personList.get(indexPerson).toString());
                     String confirm = ui.enterString("1-for confirming updating, other-cancel updating");
-                    if (Integer.valueOf(confirm) == 1) {
+                    if (Integer.parseInt(confirm) == 1) {
                         personList.remove(personList.get(indexPerson));
-                        personList.add(createUpdatedPerson(id));
-                        personList.sort(personComparator);
+                        Person updatedPerson =createUpdatedPerson(id);
+                        personList.add(updatedPerson);
+                        sortList(personList);
                         repository.saveList(personList);
                         ui.printMessage("ID " + id + " has updated successfully");
+                        ui.printMessage(updatedPerson.toString());
                         break;
                     } else break;
                 }
@@ -169,23 +156,37 @@ public class PersonService {
         }
     }
 
-    public Person createUpdatedPerson(String indexPerson) {
-        Person person;
-        String id = indexPerson;
-        String firstName = getValidatedString("Enter First Name");
-        String lastName = getValidatedString("Enter last name");
-        int birthYear = enterBirthYear();
-        PersonJob job;
-        job = Person.setVariableJob(ui.enterString(catalogPersonJobs()));
-        double salary = enterSalary();
-        person = new Person(id, firstName, lastName, birthYear, job, salary);
-        return person;
+    public boolean deletePerson() {
+        List<Person> personList = findAll();
+        String id = ui.enterString("Enter the ID for deleting");
+        boolean successDelete = false;
+        for (int i = 0; i < personList.size(); i++) {
+                if (personList.get(i).getId().equals(id)) {
+                    ui.printMessage(personList.get(i).toString());
+                    String confirm = ui.enterString("1-for confirming deleting, other- cancel deleting");
+                    if (Integer.parseInt(confirm) == 1) {
+                        Person deletedPerson = personList.get(i);
+                        personList.remove(deletedPerson);
+                        sortList(personList);
+                        repository.saveList(personList);
+                        ui.printMessage(deletedPerson.toString());
+                        successDelete = true;
+                        break;
+                    } else break;
+                }
+            }
+        return successDelete;
     }
 
     public void exitProgram(int zero) {
         if (zero == 0) {
             System.exit(0);
         }
+    }
+
+    public void sortList(List<Person> personList){
+        PersonComparator personComparator = new PersonComparator();
+        personList.sort(personComparator);
     }
 }
 
