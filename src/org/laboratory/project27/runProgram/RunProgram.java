@@ -40,7 +40,7 @@ public class RunProgram {
 
     private boolean choiceMenu() {
         ui.printMessage("==============================");
-        String a = "1";
+        String a = "1"; //todo это зачем здесь?)
         String b = "2";
         int c = 3;
         String x = c + "";

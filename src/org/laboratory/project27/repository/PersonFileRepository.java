@@ -3,16 +3,16 @@ package org.laboratory.project27.repository;
 import org.laboratory.project27.model.Person;
 import org.laboratory.project27.model.PersonJob;
 
-import javax.sql.rowset.serial.SerialStruct;
+import javax.sql.rowset.serial.SerialStruct; //todo optimize imports
 import java.io.*;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.Stream; //todo doesn't used
 
 public class PersonFileRepository {
-    public static final String FILE = "C:\\JetBrains Projects\\Project27_laboratory.txt";
-    public static final String FILE_PERSON_LAST_ID = "C:\\JetBrains Projects\\Project27_lastID.txt";
+    public static final String FILE = "Project27_laboratory.txt";
+    public static final String FILE_PERSON_LAST_ID = "Project27_lastID.txt";
 
     public List<Person> findAll() {
         List<Person> persons = new ArrayList<>();
@@ -45,6 +45,24 @@ public class PersonFileRepository {
         }
         return null;
     }
+
+    public Person findPersonByIdStream(String id) {//todo пробуй так
+        Person foundPerson = getLines().stream()
+                .map(line -> extractPerson(line))
+                .filter(pers -> pers.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+        return foundPerson;
+//        Stream<String> personStream = lines.stream().sorted();
+//        Person foundPerson = personStream.filter((line) -> (
+//                person = extractPerson(line);
+//        String n = person.getId();
+//        n.equals(id);))
+//
+//        return foundPerson;
+    }
+
 
     private List<String> getLines() {
         List<String> lines = new ArrayList<>();
@@ -82,7 +100,7 @@ public class PersonFileRepository {
         }
     }
 
-    public Person extractPerson(String line) {
+    public Person extractPerson(String line) { //todo этот метод тоже можно перенести в класс Person
         String[] txt = line.split("#");
         String id = txt[0];
         String firstName = txt[1];
@@ -93,7 +111,9 @@ public class PersonFileRepository {
         return new Person(id, firstName, lastName, birthYear, job, salary);
     }
 
-    public void convertPerson(FileWriter fileWriter, Person person) {
+    public void convertPerson(FileWriter fileWriter, Person person) { // todo  этот метод не должен принимать fileWriter,
+        // только Person, и должен возвращать String convertedPesrson = person.getId() + "#" + person.getFirstName() ...
+        // вообще этот метот так же можно разместить в классе Person, акак параметер передавать делимитер "#"
         try {
             fileWriter.write(person.getId() + "#" + person.getFirstName() + "#" + person.getLastName() + "#"
                     + person.getBirthYear() + "#" + person.getJob() + "#" +
@@ -121,17 +141,6 @@ public class PersonFileRepository {
         }
     }
 
-//    public Person findPersonByIdStream(String id) {//todo почему этот метод показывает ошибку?
-//        Person person = null;
-//        List<String> lines = getLines();
-//        Stream<String> personStream = lines.stream().sorted();
-//        Person foundPerson = personStream.filter((line) -> (
-//                person = extractPerson(line);
-//        String n = person.getId();
-//        n.equals(id);))
-//
-//        return foundPerson;
-//    }
 }
 
 

@@ -46,7 +46,8 @@ public class PersonService {
         return person;
     }
 
-    public Person createUpdatedPerson(String id) {
+    public Person createUpdatedPerson(String id) {//todo дублирование кода осталось, имелось ввиду вместо двух создать один метод с параметро
+        //boolean isUpdate, а дальше если внутри метода  ставить if заполнять поля в зависмости это create или update
         Person person;
         String firstName = getValidatedString("Enter First Name");
         String lastName = getValidatedString("Enter last name");
@@ -58,7 +59,9 @@ public class PersonService {
         return person;
     }
 
-    private String incrementId() {
+    private String incrementId() {//todo при первом запуске программы, если не было еще пользователей
+        //и не существует файл с айдишкой, программа вылетит с ошибкой а этого быть не должно
+        //если не нашли файл должны присвоить id = 0
         int id = Integer.parseInt(repository.getLastId()) + 1;
         return String.valueOf(id);
     }
@@ -129,7 +132,7 @@ public class PersonService {
         return !inputString.matches(".*\\d+.*");
     }
 
-    public void updatePerson() {
+    public void updatePerson() { //todo не исправлены прошлые замечания
         List<Person> personList = findAll();
         String id = ui.enterString("Enter the ID for updating");
         int indexPerson;
@@ -139,7 +142,8 @@ public class PersonService {
                     indexPerson = i;
                     ui.printMessage(personList.get(indexPerson).toString());
                     String confirm = ui.enterString("1-for confirming updating, other-cancel updating");
-                    if (Integer.parseInt(confirm) == 1) {
+                    if (Integer.parseInt(confirm) == 1) {//todo не должно быть вызова меню и консоли здесь. Мы потом
+                        //вместо консоли сделаем графический интерфейс или веб. слой уровня сервиса должен работать независимо от UI
                         personList.remove(personList.get(indexPerson));
                         Person updatedPerson =createUpdatedPerson(id);
                         personList.add(updatedPerson);
