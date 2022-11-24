@@ -1,13 +1,11 @@
 package org.laboratory.project27.repository;
 
 import org.laboratory.project27.model.Person;
-import org.laboratory.project27.model.PersonJob;
 
-import javax.sql.rowset.serial.SerialStruct;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PersonFileRepository {
@@ -16,18 +14,27 @@ public class PersonFileRepository {
 
     public List<Person> findAll() {
         List<Person> persons = new ArrayList<>();
-        List<String> lines = getLines();
+        List<String> lines = getLinesStream();
         for (String line : lines) {
-            Person person = extractPerson(line);
+            Person person = Person.extractPerson(line);
             persons.add(person);
         }
         return persons;
     }
 
+//    public List<Person> findAllStream(){//todo проверить метод, что не так с лямбда
+//        List<Person> personList = new ArrayList<>();
+//        List<String> stringList = getLinesFromStream();
+//        Stream<Person> stringStream = stringList.stream (
+//                (String n)->( new Person(extractPerson(n)));
+//                personList = stringStream.collect(Collectors.toList());
+//        return  personList;
+//    }
+
     public Person findPersonByName(String name) {
-        List<String> lines = getLines();
+        List<String> lines = getLinesStream();
         for (String line : lines) {
-            Person person = extractPerson(line);
+            Person person = Person.extractPerson(line);
             if (person.getFirstName().equals(name)) {
                 return person;
             }
@@ -36,9 +43,9 @@ public class PersonFileRepository {
     }
 
     public Person findPersonById(String id) {
-        List<String> lines = getLines();
+        List<String> lines = getLinesStream();
         for (String line : lines) {
-            Person person = extractPerson(line);
+            Person person = Person.extractPerson(line);
             if (person.getId().equals(id)) {
                 return person;
             }
@@ -46,7 +53,7 @@ public class PersonFileRepository {
         return null;
     }
 
-    private List<String> getLines() {
+    private List<String> getLines() { //сделан другой вариант с испльзованием потоков getLinesFromStream
         List<String> lines = new ArrayList<>();
         String line;
         try (BufferedReader bufferedReader = new BufferedReader
@@ -59,6 +66,19 @@ public class PersonFileRepository {
         }
         return lines;
     }
+
+    private List<String> getLinesStream() {
+        List<String> linesStream = new ArrayList<>();
+        try (BufferedReader bufferedReader = new BufferedReader
+                (new FileReader(PersonFileRepository.FILE))) {
+            Stream<String> lines = bufferedReader.lines();
+            linesStream = lines.collect(Collectors.toList());
+        } catch (IOException r) {
+            System.out.println("IOException");
+        }
+        return linesStream;
+    }
+
 
     public String getLastId() {
         String previousId = null;
@@ -73,8 +93,9 @@ public class PersonFileRepository {
     }
 
     public Person create(Person person) {
+        String delimiter = "#";
         try (FileWriter fileWriter = new FileWriter(FILE, true)) {
-            convertPerson(fileWriter, person);
+            fileWriter.write(Person.convertPerson(person, delimiter));
             return person;
         } catch (IOException ex) {
             System.err.println(ex);
@@ -82,26 +103,6 @@ public class PersonFileRepository {
         }
     }
 
-    public Person extractPerson(String line) {
-        String[] txt = line.split("#");
-        String id = txt[0];
-        String firstName = txt[1];
-        String lastName = txt[2];
-        int birthYear = Integer.parseInt(txt[3]);
-        PersonJob job = PersonJob.valueOf(txt[4]);
-        double salary = Double.parseDouble(txt[5]);
-        return new Person(id, firstName, lastName, birthYear, job, salary);
-    }
-
-    public void convertPerson(FileWriter fileWriter, Person person) {
-        try {
-            fileWriter.write(person.getId() + "#" + person.getFirstName() + "#" + person.getLastName() + "#"
-                    + person.getBirthYear() + "#" + person.getJob() + "#" +
-                    person.getSalary() + "#" + "\n");
-        } catch (IOException ex) {
-            System.err.println(ex);
-        }
-    }
 
     public void saveID(String id) {
         try (FileWriter fileWriter = new FileWriter(FILE_PERSON_LAST_ID, false);) {
@@ -112,16 +113,17 @@ public class PersonFileRepository {
     }
 
     public void saveList(List<Person> personList) {
+        String delimiter = "#";
         try (FileWriter fileWriter = new FileWriter(FILE, false)) {
             for (Person person : personList) {
-                convertPerson(fileWriter, person);
+                fileWriter.write(Person.convertPerson(person, delimiter));
             }
         } catch (IOException ex) {
             System.err.println(ex);
         }
     }
 
-//    public Person findPersonByIdStream(String id) {//todo почему этот метод показывает ошибку?
+//    public Person findPersonByIdStream(String id) {//todo проверить метод, что не так с лямбда
 //        Person person = null;
 //        List<String> lines = getLines();
 //        Stream<String> personStream = lines.stream().sorted();

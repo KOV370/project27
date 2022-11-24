@@ -45,6 +45,24 @@ public class Person {
         this.salary = salary;
     }
 
+    public static   Person extractPerson(String line) {
+        String[] txt = line.split("#");
+        String id = txt[0];
+        String firstName = txt[1];
+        String lastName = txt[2];
+        int birthYear = Integer.parseInt(txt[3]);
+        PersonJob job = PersonJob.valueOf(txt[4]);
+        double salary = Double.parseDouble(txt[5]);
+        return new Person(id, firstName, lastName, birthYear, job, salary);
+    }
+
+    public static String convertPerson(Person person, String delimiter) {
+        String convertedPerson;
+        convertedPerson = person.getId() + "#" + person.getFirstName() + "#" + person.getLastName() + "#"
+                + person.getBirthYear() + "#" + person.getJob() + "#" + person.getSalary() + "#" + "\n";
+        return convertedPerson;
+    }
+
     @Override
     public String toString() {
         return

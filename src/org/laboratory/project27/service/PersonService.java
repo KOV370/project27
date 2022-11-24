@@ -34,19 +34,14 @@ public class PersonService {
     }
 
     public Person createNewPerson() {
-        Person person;
-        String id = incrementId();
-        String firstName = getValidatedString("Enter First Name");
-        String lastName = getValidatedString("Enter last name");
-        int birthYear = enterBirthYear();
-        PersonJob job;
-        job = Person.setVariableJob(ui.enterString(catalogPersonJobs()));
-        double salary = enterSalary();
-        person = new Person(id, firstName, lastName, birthYear, job, salary);
-        return person;
+        return newPersonPattern(incrementId());
     }
 
     public Person createUpdatedPerson(String id) {
+        return newPersonPattern(id);
+    }
+
+    public Person newPersonPattern(String id) {
         Person person;
         String firstName = getValidatedString("Enter First Name");
         String lastName = getValidatedString("Enter last name");
@@ -59,7 +54,13 @@ public class PersonService {
     }
 
     private String incrementId() {
-        int id = Integer.parseInt(repository.getLastId()) + 1;
+        int id;
+        try {
+            id = Integer.parseInt(repository.getLastId()) + 1;
+        } catch (NumberFormatException r) {
+            repository.saveID("0");
+            return "0";
+        }
         return String.valueOf(id);
     }
 
@@ -138,10 +139,9 @@ public class PersonService {
                 if (personList.get(i).getId().equals(id)) {
                     indexPerson = i;
                     ui.printMessage(personList.get(indexPerson).toString());
-                    String confirm = ui.enterString("1-for confirming updating, other-cancel updating");
-                    if (Integer.parseInt(confirm) == 1) {
+                    if (ui.confirmNumber()) {
                         personList.remove(personList.get(indexPerson));
-                        Person updatedPerson =createUpdatedPerson(id);
+                        Person updatedPerson = createUpdatedPerson(id);
                         personList.add(updatedPerson);
                         sortList(personList);
                         repository.saveList(personList);
@@ -161,20 +161,19 @@ public class PersonService {
         String id = ui.enterString("Enter the ID for deleting");
         boolean successDelete = false;
         for (int i = 0; i < personList.size(); i++) {
-                if (personList.get(i).getId().equals(id)) {
-                    ui.printMessage(personList.get(i).toString());
-                    String confirm = ui.enterString("1-for confirming deleting, other- cancel deleting");
-                    if (Integer.parseInt(confirm) == 1) {
-                        Person deletedPerson = personList.get(i);
-                        personList.remove(deletedPerson);
-                        sortList(personList);
-                        repository.saveList(personList);
-                        ui.printMessage(deletedPerson.toString());
-                        successDelete = true;
-                        break;
-                    } else break;
-                }
+            if (personList.get(i).getId().equals(id)) {
+                ui.printMessage(personList.get(i).toString());
+                if (ui.confirmNumber()) {
+                    Person deletedPerson = personList.get(i);
+                    personList.remove(deletedPerson);
+                    sortList(personList);
+                    repository.saveList(personList);
+                    ui.printMessage(deletedPerson.toString());
+                    successDelete = true;
+                    break;
+                } else break;
             }
+        }
         return successDelete;
     }
 
@@ -184,7 +183,7 @@ public class PersonService {
         }
     }
 
-    public void sortList(List<Person> personList){
+    public void sortList(List<Person> personList) {
         PersonComparator personComparator = new PersonComparator();
         personList.sort(personComparator);
     }

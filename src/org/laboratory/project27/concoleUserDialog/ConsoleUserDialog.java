@@ -48,5 +48,12 @@ public class ConsoleUserDialog {
         System.out.println(message);
     }
 
-
+    public boolean confirmNumber() {
+        boolean confirm =false;
+        int number = 1;
+        if (readInt("1-for confirming updating, other-cancel updating") == number) {
+            confirm = true;
+        }
+        return confirm;
+    }
 }
