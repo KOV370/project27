@@ -53,6 +53,17 @@ public class PersonFileRepository {
         return null;
     }
 
+//    public Person findPersonByIdStream(String id) {//todo написал хороший пример как работать со стримами,
+//        // почему ты его не добавил?
+//        Person foundPerson = getLines().stream()
+//                .map(line -> extractPerson(line))
+//                .filter(pers -> pers.getId().equals(id))
+//                .findFirst()
+//                .orElse(null);
+//
+//        return foundPerson;
+
+
     private List<String> getLines() { //сделан другой вариант с испльзованием потоков getLinesFromStream
         List<String> lines = new ArrayList<>();
         String line;
@@ -71,7 +82,7 @@ public class PersonFileRepository {
         List<String> linesStream = new ArrayList<>();
         try (BufferedReader bufferedReader = new BufferedReader
                 (new FileReader(PersonFileRepository.FILE))) {
-            Stream<String> lines = bufferedReader.lines();
+            Stream<String> lines = bufferedReader.lines(); //todo названия переменных linesStream и lines логичнее поменять местами
             linesStream = lines.collect(Collectors.toList());
         } catch (IOException r) {
             System.out.println("IOException");
@@ -123,6 +134,7 @@ public class PersonFileRepository {
         }
     }
 
+    //todo удалить добавил пример выше как работать со стримами
 //    public Person findPersonByIdStream(String id) {//todo проверить метод, что не так с лямбда
 //        Person person = null;
 //        List<String> lines = getLines();

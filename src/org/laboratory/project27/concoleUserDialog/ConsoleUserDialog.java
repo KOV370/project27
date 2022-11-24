@@ -51,7 +51,9 @@ public class ConsoleUserDialog {
     public boolean confirmNumber() {
         boolean confirm =false;
         int number = 1;
-        if (readInt("1-for confirming updating, other-cancel updating") == number) {
+        if (readInt("1-for confirming updating, other-cancel updating") == number) { //todo не должно быть захардкожено
+            //информация о бизнес логике, можно написать метод который будет принимать 1 или 0
+            //но что это конфирмация и апдейт не очень хорошо тут хардкодить
             confirm = true;
         }
         return confirm;

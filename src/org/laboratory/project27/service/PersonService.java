@@ -38,7 +38,14 @@ public class PersonService {
     }
 
     public Person createUpdatedPerson(String id) {
-        return newPersonPattern(id);
+        return newPersonPattern(id); //todo метод update вызывает метод new не очень логично
+        //почему не сделать один метод createOrUpdate(boolean create) {
+        // if (create) {
+        //     id = incrementId();
+        // }
+        // Person person;
+        // String firstName = getValidatedString("Enter First Name");
+        // ...
     }
 
     public Person newPersonPattern(String id) {
@@ -56,9 +63,11 @@ public class PersonService {
     private String incrementId() {
         int id;
         try {
-            id = Integer.parseInt(repository.getLastId()) + 1;
+            id = Integer.parseInt(repository.getLastId()) + 1;  //todo метод repository.getLastId() может возвращать null
+            // значит нужна проверка на null,
         } catch (NumberFormatException r) {
-            repository.saveID("0");
+            repository.saveID("0"); //todo зачем saveId? мы просто получаем id шник, если не смогли распарсить то устанавливаем в 0
+            //а другое значение установим в том месте где будем записывать новую запись в базу
             return "0";
         }
         return String.valueOf(id);
@@ -130,8 +139,9 @@ public class PersonService {
         return !inputString.matches(".*\\d+.*");
     }
 
-    public void updatePerson() {
-        List<Person> personList = findAll();
+    //todo этот метод не должен почти содержать логики, он просто берет person и вызывает метод repository.update(Person person)
+    public void updatePerson() { //todo Person должен передаваться как параметр
+        List<Person> personList = findAll(); //todo тут делам findById() уже этот метод есть и никакого цикла потом не нужно
         String id = ui.enterString("Enter the ID for updating");
         int indexPerson;
         for (int i = 0; i < personList.size(); i++) {
@@ -139,11 +149,16 @@ public class PersonService {
                 if (personList.get(i).getId().equals(id)) {
                     indexPerson = i;
                     ui.printMessage(personList.get(indexPerson).toString());
-                    if (ui.confirmNumber()) {
-                        personList.remove(personList.get(indexPerson));
+                    if (ui.confirmNumber()) { //todo проверки тут не должно быть. она не нужна. если очень хочется то
+                        //можно добавить ее не здесь а на уровень выше. в том методе который будет вызывать updatePerson()
+                        //сервисный метод update должен только делать update и никакой дополнительной логики
+                        personList.remove(personList.get(indexPerson)); //todo personList и remove вообще не должнобыть в этом методе
+
                         Person updatedPerson = createUpdatedPerson(id);
-                        personList.add(updatedPerson);
-                        sortList(personList);
+                        personList.add(updatedPerson); //todo не должно быть тут списка. надо придумать как эту логику избежать
+                        // либо перенести ее в repository. потому что когда мы будем работать с БД нам не надо будет пробегать
+                        // по всему списку и перезаписывать ее. мы будем перезаписаться только ОДНУ запись. которую апдейтим
+                        sortList(personList); //todo не надо делать сортировку
                         repository.saveList(personList);
                         ui.printMessage("ID " + id + " has updated successfully");
                         ui.printMessage(updatedPerson.toString());
