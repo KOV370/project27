@@ -58,8 +58,8 @@ public class Person {
 
     public static String convertPerson(Person person, String delimiter) {
         String convertedPerson;
-        convertedPerson = person.getId() + "#" + person.getFirstName() + "#" + person.getLastName() + "#"
-                + person.getBirthYear() + "#" + person.getJob() + "#" + person.getSalary() + "#" + "\n";
+        convertedPerson = person.getId() + delimiter + person.getFirstName() + delimiter + person.getLastName() + delimiter
+                + person.getBirthYear() + delimiter + person.getJob() + delimiter + person.getSalary() + delimiter + "\n";
         return convertedPerson;
     }
 

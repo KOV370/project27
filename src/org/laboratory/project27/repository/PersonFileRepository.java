@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
 public class PersonFileRepository {
     public static final String FILE = "C:\\JetBrains Projects\\Project27_laboratory.txt";
     public static final String FILE_PERSON_LAST_ID = "C:\\JetBrains Projects\\Project27_lastID.txt";
@@ -53,6 +54,18 @@ public class PersonFileRepository {
         return null;
     }
 
+
+    public Person findPersonByIdStream(String id) {
+        Person person = null;
+        List<String> lines = getLinesStream();
+        Person foundPerson = lines.stream()
+                .map(line -> person.extractPerson(line))
+                .filter(pers -> pers.getId().equals(id))
+                .findFirst()
+                .orElse(null);//todo проверить  null
+        return foundPerson;
+    }
+
     private List<String> getLines() { //сделан другой вариант с испльзованием потоков getLinesFromStream
         List<String> lines = new ArrayList<>();
         String line;
@@ -67,18 +80,17 @@ public class PersonFileRepository {
         return lines;
     }
 
-    private List<String> getLinesStream() {
-        List<String> linesStream = new ArrayList<>();
+    public List<String> getLinesStream() {
+        List<String> list = new ArrayList<>();
         try (BufferedReader bufferedReader = new BufferedReader
                 (new FileReader(PersonFileRepository.FILE))) {
-            Stream<String> lines = bufferedReader.lines();
-            linesStream = lines.collect(Collectors.toList());
+            Stream<String> linesStream = bufferedReader.lines();
+            list = linesStream.collect(Collectors.toList());
         } catch (IOException r) {
             System.out.println("IOException");
         }
-        return linesStream;
+        return list;
     }
-
 
     public String getLastId() {
         String previousId = null;
@@ -103,7 +115,6 @@ public class PersonFileRepository {
         }
     }
 
-
     public void saveID(String id) {
         try (FileWriter fileWriter = new FileWriter(FILE_PERSON_LAST_ID, false);) {
             fileWriter.write(String.valueOf(id));
@@ -123,17 +134,12 @@ public class PersonFileRepository {
         }
     }
 
-//    public Person findPersonByIdStream(String id) {//todo проверить метод, что не так с лямбда
-//        Person person = null;
-//        List<String> lines = getLines();
-//        Stream<String> personStream = lines.stream().sorted();
-//        Person foundPerson = personStream.filter((line) -> (
-//                person = extractPerson(line);
-//        String n = person.getId();
-//        n.equals(id);))
-//
-//        return foundPerson;
-//    }
+
+    public List<Person> listPersons() {
+        List<Person> personList = findAll();
+        return personList;
+    }
 }
+
 
 

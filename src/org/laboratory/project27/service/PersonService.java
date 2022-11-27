@@ -8,6 +8,7 @@ import org.laboratory.project27.repository.PersonFileRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class PersonService {
     private ConsoleUserDialog ui;
@@ -22,7 +23,7 @@ public class PersonService {
         return "Enter person job from the list:" + Arrays.toString(PersonJob.values());
     }
 
-    public Person add(Person input) {
+    public void add(Person input) {
         Person person = repository.create(input);
         if (person == null) {
             ui.printMessage("Can not create the person");
@@ -30,19 +31,18 @@ public class PersonService {
             ui.printMessage("Person saved successfully");
             repository.saveID(person.getId());
         }
-        return person;
     }
 
     public Person createNewPerson() {
-        return newPersonPattern(incrementId());
+        return createOrUpdatePerson(incrementId());
     }
 
     public Person createUpdatedPerson(String id) {
-        return newPersonPattern(id);
+        return createOrUpdatePerson(id);
     }
 
-    public Person newPersonPattern(String id) {
-        Person person;
+    public Person createOrUpdatePerson(String id) {//если сделать ссылку на boolean, то все равно надо как то передавать
+        Person person;// ID по изменяемому объекту в параметре, сам person может меняться, но ID  должен беть оставлен без изменений.
         String firstName = getValidatedString("Enter First Name");
         String lastName = getValidatedString("Enter last name");
         int birthYear = enterBirthYear();
@@ -57,9 +57,8 @@ public class PersonService {
         int id;
         try {
             id = Integer.parseInt(repository.getLastId()) + 1;
-        } catch (NumberFormatException r) {
-            repository.saveID("0");
-            return "0";
+        } catch (NumberFormatException NullPointerException) {
+            id = 0;
         }
         return String.valueOf(id);
     }
@@ -92,7 +91,7 @@ public class PersonService {
     }
 
     public Person getPersonById(String id) {
-        Person person = repository.findPersonById(id);
+        Person person = repository.findPersonByIdStream(id);
         if (person == null) {
             ui.printMessage("ID not found");
         }
@@ -131,46 +130,48 @@ public class PersonService {
     }
 
     public void updatePerson() {
-        List<Person> personList = findAll();
+        Person updatedPerson = null;
         String id = ui.enterString("Enter the ID for updating");
-        int indexPerson;
-        for (int i = 0; i < personList.size(); i++) {
-            try {
-                if (personList.get(i).getId().equals(id)) {
-                    indexPerson = i;
-                    ui.printMessage(personList.get(indexPerson).toString());
-                    if (ui.confirmNumber()) {
-                        personList.remove(personList.get(indexPerson));
-                        Person updatedPerson = createUpdatedPerson(id);
-                        personList.add(updatedPerson);
-                        sortList(personList);
-                        repository.saveList(personList);
-                        ui.printMessage("ID " + id + " has updated successfully");
-                        ui.printMessage(updatedPerson.toString());
-                        break;
-                    } else break;
+        List<Person> personList = repository.listPersons();
+        Optional<Person> foundPerson = Optional.ofNullable(repository.findPersonByIdStream(id));
+        if (foundPerson.isPresent()) {
+            for (Person person : personList) {
+                if (person.getId().equals(id)) {
+                    updatedPerson = setUpdatedPerson(person);
                 }
-            } catch (NumberFormatException ex) {
-                break;
             }
-        }
+            sortList(personList);
+            repository.saveList(personList);
+            ui.printMessage("ID " + id + " has updated successfully");
+            ui.printMessage(updatedPerson != null ? updatedPerson.toString() : null);
+        } else ui.printMessage("ID did not found");
+    }
+
+    public Person setUpdatedPerson(Person person) {
+        person.setFirstName(ui.enterString("Enter the first name for updating"));
+        person.setLastName(ui.enterString("Enter the last name for updating"));
+        person.setBirthYear(enterBirthYear());
+        person.setJob(Person.setVariableJob(ui.enterString(catalogPersonJobs())));
+        person.setSalary(enterSalary());
+        return person;
     }
 
     public boolean deletePerson() {
-        List<Person> personList = findAll();
-        String id = ui.enterString("Enter the ID for deleting");
         boolean successDelete = false;
+        String id = ui.enterString("Enter the ID for deleting");
+        List<Person> personList = repository.listPersons();
         for (int i = 0; i < personList.size(); i++) {
             if (personList.get(i).getId().equals(id)) {
                 ui.printMessage(personList.get(i).toString());
-                if (ui.confirmNumber()) {
+                ui.printMessage("1-for confirming deleting, other-exit");
+                if (ui.enter_1()) {
                     Person deletedPerson = personList.get(i);
                     personList.remove(deletedPerson);
                     sortList(personList);
                     repository.saveList(personList);
                     ui.printMessage(deletedPerson.toString());
                     successDelete = true;
-                    break;
+                    return successDelete;
                 } else break;
             }
         }
