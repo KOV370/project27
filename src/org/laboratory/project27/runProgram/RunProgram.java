@@ -102,24 +102,28 @@ public class RunProgram {
     }
 
     private void createPerson() {
-        currentPerson = personService.createNewPerson();
+        currentPerson = personService.createNewPerson(); //todo 1 тут будем вызывать Person readPersonFromConsole()
+        //todo и метод readPersonFromConsole() можно вынести в отдельный класс сервис personConsoleService,
+        //чтобы не было путаницы. а в классе PersonService останется create(), get()/find(), update(), delete() которые будут
+        //в соответствовать терминам CRUD базы данных. и в этих методах НИГДЕ не будет дергаться класс ConsoleUserDialog.
+
         ui.printMessage("Current person is: " + currentPerson);
     }
 
     private void savePerson() {
         if (currentPerson != null) {
-            personService.add(currentPerson);
+            personService.add(currentPerson); //todo 2 а тут будет personService.create(currentPerson)
             ui.printMessage("Saved person is: " + currentPerson);
         } else
             ui.printMessage("Create person for saving.");
     }
 
     private void updatePerson() {
-        personService.updatePerson();
+        personService.updatePerson();  //todo 3 а тут будет personService.update(currentPerson)
     }
 
     private void deletePerson() {
-        if (!personService.deletePerson()) {
+        if (!personService.deletePerson()) {  //todo 4 а тут будет personService.delete(currentPerson.getId())
             ui.enterString("ID did not find. Press enter.");
         }
     }

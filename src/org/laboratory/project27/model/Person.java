@@ -46,7 +46,7 @@ public class Person {
     }
 
     public static   Person extractPerson(String line) {
-        String[] txt = line.split("#");
+        String[] txt = line.split("#"); //todo тут тогда тоже delimiter как в convertPerson()
         String id = txt[0];
         String firstName = txt[1];
         String lastName = txt[2];

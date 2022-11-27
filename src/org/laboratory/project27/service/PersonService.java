@@ -33,14 +33,20 @@ public class PersonService {
         }
     }
 
-    public Person createNewPerson() {
+    public Person createNewPerson() { //todo можно назвать просто create()
         return createOrUpdatePerson(incrementId());
     }
 
+    //todo этот метод нигде не вызывается
     public Person createUpdatedPerson(String id) {
         return createOrUpdatePerson(id);
     }
 
+    // todo update person в параметр нужно передавать объект Person person
+    // нужно разделить логику. сделаем метод readPersonFromConsole() который будет считаывать данные с консоли.
+    // и будет два метода (create(Person person) и update(Person person). методы create() и update() с простейшей логикой
+    // которые будут просто дергать repository.create(person), repository.update(person)
+    // в методе update() сначала делаем поиск по id, если находим то делаем апдейт. если не находим то бросам эксепшн
     public Person createOrUpdatePerson(String id) {//если сделать ссылку на boolean, то все равно надо как то передавать
         Person person;// ID по изменяемому объекту в параметре, сам person может меняться, но ID  должен беть оставлен без изменений.
         String firstName = getValidatedString("Enter First Name");
@@ -70,7 +76,8 @@ public class PersonService {
             try {
                 isError = false;
                 salary = ui.readDouble("Set the salary.");
-                exitProgram((int) salary);
+                exitProgram((int) salary); //todo тут не должно быть exitProgram(), максумум тут может быть метод validate()
+                //и если введенное значение не валидно, то можно выйти в верхнее меню, где пользователь решит что делать дальше
             } catch (NumberFormatException ex) {
                 isError = true;
             }
@@ -129,20 +136,23 @@ public class PersonService {
         return !inputString.matches(".*\\d+.*");
     }
 
-    public void updatePerson() {
+    public void updatePerson() { //этот метод должен на вход принимать параметр Person person
+        //ввод с консоли вынести в другой метод Person readPersonFromConsole()
         Person updatedPerson = null;
         String id = ui.enterString("Enter the ID for updating");
         List<Person> personList = repository.listPersons();
         Optional<Person> foundPerson = Optional.ofNullable(repository.findPersonByIdStream(id));
         if (foundPerson.isPresent()) {
-            for (Person person : personList) {
+            for (Person person : personList) { //todo тут цикл не нужен, просто вызываем repository.update(person)
                 if (person.getId().equals(id)) {
                     updatedPerson = setUpdatedPerson(person);
                 }
             }
             sortList(personList);
             repository.saveList(personList);
-            ui.printMessage("ID " + id + " has updated successfully");
+            ui.printMessage("ID " + id + " has updated successfully"); //todo это лучше выносить на верхний уровень,
+            // в сервисах можем сделать логирование, а вывод сообщений пользователю это уже задача слоя контроллера,
+            // а не сервиса
             ui.printMessage(updatedPerson != null ? updatedPerson.toString() : null);
         } else ui.printMessage("ID did not found");
     }
@@ -156,7 +166,8 @@ public class PersonService {
         return person;
     }
 
-    public boolean deletePerson() {
+    public boolean deletePerson() { //todo этот метод должен на вход принимать id
+        // делать repository.findById() и если нашли repository.delete()
         boolean successDelete = false;
         String id = ui.enterString("Enter the ID for deleting");
         List<Person> personList = repository.listPersons();
