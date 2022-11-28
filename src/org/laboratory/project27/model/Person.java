@@ -17,6 +17,14 @@ public class Person {
         this.salary = salary;
     }
 
+    public Person(String firstName, String lastName, int birthYear, PersonJob job, double salary) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthYear = birthYear;
+        this.job = job;
+        this.salary = salary;
+    }
+
     public static PersonJob setVariableJob(String inputJob) {
         if (inputJob == null || inputJob.isBlank()) {
             return PersonJob.UNKNOWN;

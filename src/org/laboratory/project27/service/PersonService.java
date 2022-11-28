@@ -8,7 +8,6 @@ import org.laboratory.project27.repository.PersonFileRepository;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 public class PersonService {
     private ConsoleUserDialog ui;
@@ -23,44 +22,16 @@ public class PersonService {
         return "Enter person job from the list:" + Arrays.toString(PersonJob.values());
     }
 
-    public void add(Person input) {
-        Person person = repository.create(input);
-        if (person == null) {
-            ui.printMessage("Can not create the person");
-        } else {
-            ui.printMessage("Person saved successfully");
-            repository.saveID(person.getId());
-        }
-    }
-
-    public Person createNewPerson() {
-        return createOrUpdatePerson(incrementId());
-    }
-
-    public Person createUpdatedPerson(String id) {
-        return createOrUpdatePerson(id);
-    }
-
-    public Person createOrUpdatePerson(String id) {//если сделать ссылку на boolean, то все равно надо как то передавать
-        Person person;// ID по изменяемому объекту в параметре, сам person может меняться, но ID  должен беть оставлен без изменений.
+    public Person readPersonFromConsole() {
+        Person person;
         String firstName = getValidatedString("Enter First Name");
         String lastName = getValidatedString("Enter last name");
         int birthYear = enterBirthYear();
         PersonJob job;
         job = Person.setVariableJob(ui.enterString(catalogPersonJobs()));
         double salary = enterSalary();
-        person = new Person(id, firstName, lastName, birthYear, job, salary);
+        person = new Person(firstName, lastName, birthYear, job, salary);
         return person;
-    }
-
-    private String incrementId() {
-        int id;
-        try {
-            id = Integer.parseInt(repository.getLastId()) + 1;
-        } catch (NumberFormatException NullPointerException) {
-            id = 0;
-        }
-        return String.valueOf(id);
     }
 
     private double enterSalary() {
@@ -78,7 +49,7 @@ public class PersonService {
         return salary;
     }
 
-    public List<Person> findAll() {
+    public List<Person> findAll() {//todo
         return repository.findAll();
     }
 
@@ -91,7 +62,7 @@ public class PersonService {
     }
 
     public Person getPersonById(String id) {
-        Person person = repository.findPersonByIdStream(id);
+        Person person = repository.findPersonById(id);
         if (person == null) {
             ui.printMessage("ID not found");
         }
@@ -129,22 +100,16 @@ public class PersonService {
         return !inputString.matches(".*\\d+.*");
     }
 
-    public void updatePerson() {
-        Person updatedPerson = null;
-        String id = ui.enterString("Enter the ID for updating");
-        List<Person> personList = repository.listPersons();
-        Optional<Person> foundPerson = Optional.ofNullable(repository.findPersonByIdStream(id));
-        if (foundPerson.isPresent()) {
-            for (Person person : personList) {
-                if (person.getId().equals(id)) {
-                    updatedPerson = setUpdatedPerson(person);
-                }
-            }
-            sortList(personList);
-            repository.saveList(personList);
-            ui.printMessage("ID " + id + " has updated successfully");
-            ui.printMessage(updatedPerson != null ? updatedPerson.toString() : null);
-        } else ui.printMessage("ID did not found");
+    public Person create(Person input) {
+        return repository.create(input);
+    }
+
+    public Person update(Person person) {
+        if (repository.findPersonById(person.getId()) != null) {
+            return repository.update(person);
+        } else {
+            return repository.create(person);
+        }
     }
 
     public Person setUpdatedPerson(Person person) {
@@ -156,10 +121,10 @@ public class PersonService {
         return person;
     }
 
-    public boolean deletePerson() {
+    public boolean delete() {
         boolean successDelete = false;
         String id = ui.enterString("Enter the ID for deleting");
-        List<Person> personList = repository.listPersons();
+        List<Person> personList = repository.findAll();
         for (int i = 0; i < personList.size(); i++) {
             if (personList.get(i).getId().equals(id)) {
                 ui.printMessage(personList.get(i).toString());
@@ -168,7 +133,7 @@ public class PersonService {
                     Person deletedPerson = personList.get(i);
                     personList.remove(deletedPerson);
                     sortList(personList);
-                    repository.saveList(personList);
+                    repository.saveAll(personList);
                     ui.printMessage(deletedPerson.toString());
                     successDelete = true;
                     return successDelete;
@@ -188,6 +153,8 @@ public class PersonService {
         PersonComparator personComparator = new PersonComparator();
         personList.sort(personComparator);
     }
+
+
 }
 
 

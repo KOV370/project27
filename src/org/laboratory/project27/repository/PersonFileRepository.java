@@ -5,6 +5,7 @@ import org.laboratory.project27.model.Person;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -64,6 +65,18 @@ public class PersonFileRepository {
     }
 
     public Person create(Person person) {
+        person.setId(incrementId());
+        try (FileWriter fileWriter = new FileWriter(FILE, true)) {
+            fileWriter.write(Person.convertPerson(person, DELIMITER));
+            saveID(person.getId());
+            return person;
+        } catch (IOException ex) {
+            System.err.println(ex);
+            return null;
+        }
+    }
+
+    public Person update(Person person) {
         try (FileWriter fileWriter = new FileWriter(FILE, true)) {
             fileWriter.write(Person.convertPerson(person, DELIMITER));
             return person;
@@ -71,6 +84,32 @@ public class PersonFileRepository {
             System.err.println(ex);
             return null;
         }
+
+//        Person updatedPerson = null;
+//    //    String id = ui.enterString("Enter the ID for updating");
+//        List<Person> personList = repository.findAll();
+//        Optional<Person> foundPerson = Optional.ofNullable(repository.findPersonById(id));
+//        if (foundPerson.isPresent()) {
+//            for (Person person : personList) {
+//                if (person.getId().equals(id)) {
+//                    updatedPerson = setUpdatedPerson(person);
+//                }
+//            }
+//       //     sortList(personList);
+//            repository.saveAll(personList);
+//     //       ui.printMessage("ID " + id + " has updated successfully");
+//     //       ui.printMessage(updatedPerson != null ? updatedPerson.toString() : null);
+//        } else ui.printMessage("ID did not found");
+    }
+
+    private String incrementId() {
+        int id;
+        try {
+            id = Integer.parseInt(getLastId()) + 1;
+        } catch (NumberFormatException NullPointerException) {
+            id = 0;
+        }
+        return String.valueOf(id);
     }
 
     public void saveID(String id) {

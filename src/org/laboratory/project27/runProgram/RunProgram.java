@@ -6,7 +6,6 @@ import org.laboratory.project27.repository.PersonFileRepository;
 import org.laboratory.project27.service.PersonService;
 
 import java.util.List;
-import java.util.Optional;
 
 public class RunProgram {
     public static final boolean PROGRAM_EXIT = false;
@@ -40,7 +39,11 @@ public class RunProgram {
     }
 
     private boolean choiceMenu() {
-        ui.printMessage("==============================");
+        if (currentPerson != null) {
+            ui.printMessage("CurrentPerson = {" + currentPerson + "}");
+        } else {
+            ui.printMessage("CurrentPerson is null");
+        }
         int numberMenu = ui.readInt("Make your choice");
         {
             switch (numberMenu) {
@@ -97,28 +100,55 @@ public class RunProgram {
     }
 
     private void createPerson() {
-        currentPerson = personService.createNewPerson();
+        currentPerson = personService.readPersonFromConsole();
         ui.printMessage("Current person is: " + currentPerson);
     }
 
     private void savePerson() {
         if (currentPerson != null) {
-            personService.add(currentPerson);
-            ui.printMessage("Saved person is: " + currentPerson);
-        } else
+            Person createdPerson = personService.create(currentPerson);
+            if (createdPerson != null) {
+                ui.printMessage("Person saved successfully");
+            } else {
+                ui.printMessage("Error person has not saved");
+            }
+        } else {
             ui.printMessage("Create person for saving.");
+        }
     }
 
     private void updatePerson() {
-        personService.updatePerson();
+        if (currentPerson != null) {
+            String currentId = currentPerson.getId();
+            currentPerson = personService.readPersonFromConsole();
+            currentPerson.setId(currentId);
+            Person updatedPerson = personService.update(currentPerson);
+            if (updatedPerson != null) {
+                ui.printMessage("Person saved successfully");
+            } else {
+                ui.printMessage("Error person has not saved");
+            }
+        } else {
+            ui.printMessage("Create person for saving.");
+        }
+
+
     }
 
     private void deletePerson() {
-        if (!personService.deletePerson()) {
+        if (!personService.delete()) {
             ui.enterString("ID did not find. Press enter.");
         }
     }
 
+    public boolean confirm() {//todo
+        boolean confirm = false;
+        String yes = "y";
+        if (ui.enterString("Enter number:").equalsIgnoreCase(yes)) {
+            confirm = true;
+        }
+        return confirm;
+    }
 }
 
 
