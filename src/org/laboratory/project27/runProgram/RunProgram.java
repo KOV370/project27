@@ -6,6 +6,7 @@ import org.laboratory.project27.repository.PersonFileRepository;
 import org.laboratory.project27.service.PersonService;
 
 import java.util.List;
+import java.util.Optional;
 
 public class RunProgram {
     public static final boolean PROGRAM_EXIT = false;
@@ -40,13 +41,6 @@ public class RunProgram {
 
     private boolean choiceMenu() {
         ui.printMessage("==============================");
-        String a = "1";
-        String b = "2";
-        int c = 3;
-        String x = c + "";
-        int y = c + Integer.parseInt(b);
-        String w = a + b;
-        System.out.println("int c + \"\" =String " + x + "; int c + Integer.parseInt(String b) =int " + y + "; String a + String b =String " + w);
         int numberMenu = ui.readInt("Make your choice");
         {
             switch (numberMenu) {
@@ -80,6 +74,7 @@ public class RunProgram {
             return CONTINUE_EXECUTION;
         }
     }
+
     private void findAllPersons() {
         List<Person> persons = personService.findAll();
         for (Person person : persons) {

@@ -29,24 +29,8 @@ public class Person {
         return PersonJob.UNKNOWN;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public double getSalary() {
-        return salary;
-    }
-
-    public void setSalary(double salary) {
-        this.salary = salary;
-    }
-
-    public static   Person extractPerson(String line) {
-        String[] txt = line.split("#");
+    public static Person extractPerson(String line, String delimiter) {
+        String[] txt = line.split(delimiter);
         String id = txt[0];
         String firstName = txt[1];
         String lastName = txt[2];
@@ -61,6 +45,22 @@ public class Person {
         convertedPerson = person.getId() + delimiter + person.getFirstName() + delimiter + person.getLastName() + delimiter
                 + person.getBirthYear() + delimiter + person.getJob() + delimiter + person.getSalary() + delimiter + "\n";
         return convertedPerson;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
     }
 
     @Override
