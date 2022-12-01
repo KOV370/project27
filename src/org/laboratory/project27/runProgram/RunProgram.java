@@ -39,11 +39,11 @@ public class RunProgram {
     }
 
     private boolean choiceMenu() {
-        if (currentPerson != null) {
-            ui.printMessage("CurrentPerson = {" + currentPerson + "}");
-        } else {
-            ui.printMessage("CurrentPerson is null");
-        }
+//        if (currentPerson != null) {
+//            ui.printMessage("CurrentPerson = {" + currentPerson + "}");
+//        } else {
+//            ui.printMessage("CurrentPerson is null");
+//        }
         int numberMenu = ui.readInt("Make your choice");
         {
             switch (numberMenu) {
@@ -63,7 +63,7 @@ public class RunProgram {
                     findAllPersons();
                     break;
                 case 6:
-                    updatePerson();
+                    updatePersonOleg();
                     break;
                 case 7:
                     deletePerson();
@@ -87,9 +87,9 @@ public class RunProgram {
 
     private void findPersonByID() {
         currentPerson = personService.getPersonById(ui.enterString("Enter the ID for downloading."));
-        if (currentPerson != null) {
-            ui.printMessage(currentPerson.toString());
-        }
+//        if (currentPerson != null) {
+//            ui.printMessage(currentPerson.toString());
+//        }
     }
 
     private void findPersonByName() {
@@ -117,7 +117,19 @@ public class RunProgram {
         }
     }
 
+    private void updatePersonOleg() {
+        currentPerson = personService.getPersonById(ui.enterString("Enter the ID for downloading."));
+        if (currentPerson != null) {
+            ui.enterString("01" + currentPerson.toString());
+            String currentId = currentPerson.getId();
+            personService.updateOleg(currentId);
+        } else {
+            ui.enterString("ID did not find. Press enter.");
+        }
+    }
+
     private void updatePerson() {
+        currentPerson = personService.getPersonById(ui.enterString("Enter the ID for downloading."));
         if (currentPerson != null) {
             String currentId = currentPerson.getId();
             currentPerson = personService.readPersonFromConsole();
@@ -131,25 +143,22 @@ public class RunProgram {
         } else {
             ui.printMessage("Create person for saving.");
         }
-
-
     }
 
     private void deletePerson() {
-        if (!personService.delete()) {
-            ui.enterString("ID did not find. Press enter.");
-        }
-    }
-
-    public boolean confirm() {//todo
-        boolean confirm = false;
-        String yes = "y";
-        if (ui.enterString("Enter number:").equalsIgnoreCase(yes)) {
-            confirm = true;
-        }
-        return confirm;
+        String currentId;
+        currentId = ui.enterString("Enter the ID for downloading.");//todo как сделать, чтобы после этого метода не надо было нажмимать enter
+        currentPerson = personService.getPersonById(currentId);
+        if (currentPerson != null) {
+            ui.enterString(currentPerson.toString());
+            currentId = currentPerson.getId();
+            if (personService.delete(currentId)) {
+                ui.enterString("Person deleted successfully");
+            } else ui.enterString("Wrong deleting. Press enter.");
+        } else ui.enterString("ID did not find. Press enter.");
     }
 }
+
 
 
 

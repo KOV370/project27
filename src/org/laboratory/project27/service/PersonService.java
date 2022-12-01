@@ -8,6 +8,7 @@ import org.laboratory.project27.repository.PersonFileRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class PersonService {
     private ConsoleUserDialog ui;
@@ -35,14 +36,13 @@ public class PersonService {
     }
 
     private double enterSalary() {
-        double salary = 0d;
+        double salary;
         boolean isError;
         do {
-            try {
-                isError = false;
-                salary = ui.readDouble("Set the salary.");
-                exitProgram((int) salary);
-            } catch (NumberFormatException ex) {
+            if ((salary = ui.readDouble("Set the salary.")) != 0) {
+                return salary;
+            } else {
+                exitProgram();
                 isError = true;
             }
         } while (isError);
@@ -80,9 +80,16 @@ public class PersonService {
 
     private int enterBirthYear() {
         int birthYear;
+        boolean isError ;
         do {
-            birthYear = ui.readInt("Enter birthYear");
-            exitProgram(birthYear);
+            do {
+                if ((birthYear = ui.readInt("Enter birthYear")) != 0) {
+                    isError = false;
+                } else {
+                    exitProgram();
+                    isError = true;
+                }
+            } while (isError);
         } while (!isValid(birthYear));
         return birthYear;
     }
@@ -112,40 +119,43 @@ public class PersonService {
         }
     }
 
-    public Person setUpdatedPerson(Person person) {
+    public void updateOleg(String id) {
+        List<Person> personList = findAll();
+        sortList(personList);
+        Optional<Person> foundOptional = personList.stream().filter(n -> n.getId().equals(id)).findFirst();
+        if (foundOptional.isPresent()) {
+            Person foundPerson = foundOptional.get();
+            setUpdatedPersonOleg(foundPerson);
+        } else personList = null;
+        repository.saveAll(personList);
+    }
+
+    public void setUpdatedPersonOleg(Person person) {
         person.setFirstName(ui.enterString("Enter the first name for updating"));
         person.setLastName(ui.enterString("Enter the last name for updating"));
         person.setBirthYear(enterBirthYear());
         person.setJob(Person.setVariableJob(ui.enterString(catalogPersonJobs())));
         person.setSalary(enterSalary());
-        return person;
     }
 
-    public boolean delete() {
-        boolean successDelete = false;
-        String id = ui.enterString("Enter the ID for deleting");
-        List<Person> personList = repository.findAll();
-        for (int i = 0; i < personList.size(); i++) {
-            if (personList.get(i).getId().equals(id)) {
-                ui.printMessage(personList.get(i).toString());
-                ui.printMessage("1-for confirming deleting, other-exit");
-                if (ui.enter_1()) {
-                    Person deletedPerson = personList.get(i);
-                    personList.remove(deletedPerson);
-                    sortList(personList);
-                    repository.saveAll(personList);
-                    ui.printMessage(deletedPerson.toString());
-                    successDelete = true;
-                    return successDelete;
-                } else break;
+    public boolean delete(String id) {
+        boolean confirm;
+        List<Person> personList = repository.delete(id);
+        if (confirm()) {
+            repository.saveAll(personList);
+            confirm = true;
+        } else confirm = false;
+        return confirm;
+    }
+
+    public void exitProgram() {
+        try {
+            String exit = ui.enterString("9-exit program or other-continue");
+            if (Integer.valueOf(exit) == 9) {
+                System.exit(0);
             }
-        }
-        return successDelete;
-    }
-
-    public void exitProgram(int zero) {
-        if (zero == 0) {
-            System.exit(0);
+        } catch (NumberFormatException r) {
+            ui.printMessage("Continue entering");
         }
     }
 
@@ -154,7 +164,14 @@ public class PersonService {
         personList.sort(personComparator);
     }
 
-
+    public boolean confirm() {//todo
+        boolean confirm = false;
+        String yes = "y";
+        if (ui.enterString("For confirming deleting enter \"Y\", others - cancel.").equalsIgnoreCase(yes)) {
+            confirm = true;
+        }
+        return confirm;
+    }
 }
 
 

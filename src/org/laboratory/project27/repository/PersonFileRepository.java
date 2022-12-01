@@ -84,22 +84,6 @@ public class PersonFileRepository {
             System.err.println(ex);
             return null;
         }
-
-//        Person updatedPerson = null;
-//    //    String id = ui.enterString("Enter the ID for updating");
-//        List<Person> personList = repository.findAll();
-//        Optional<Person> foundPerson = Optional.ofNullable(repository.findPersonById(id));
-//        if (foundPerson.isPresent()) {
-//            for (Person person : personList) {
-//                if (person.getId().equals(id)) {
-//                    updatedPerson = setUpdatedPerson(person);
-//                }
-//            }
-//       //     sortList(personList);
-//            repository.saveAll(personList);
-//     //       ui.printMessage("ID " + id + " has updated successfully");
-//     //       ui.printMessage(updatedPerson != null ? updatedPerson.toString() : null);
-//        } else ui.printMessage("ID did not found");
     }
 
     private String incrementId() {
@@ -130,7 +114,15 @@ public class PersonFileRepository {
         }
     }
 
+    public List<Person> delete(String id) {//todo
+        List<Person> personList = findAll();
+        Optional<Person> personStream = personList.stream().filter(n -> n.getId().equals(id)).findFirst();
+        if (personStream.isPresent()) {
+            personList.remove(personStream.get());
+        } else {
+            personList = null;
+        }
+        return personList;
+    }
 }
-
-
 
