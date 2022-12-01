@@ -8,11 +8,11 @@ public class ConsoleUserDialog {
 
     public int readInt(String message) {
         int x;
-        try {
+        try { //todo у нас был хорошее решение с циклом, надо вернуть
             x = Integer.parseInt(enterString(message));
         } catch (NumberFormatException e) {
             printMessage("Wrong format int");
-            x = 0;
+            x = 0; //todo присвоение 0 должно быть в строке 10 при объявлении
         }
         return x;
     }

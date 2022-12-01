@@ -39,7 +39,7 @@ public class RunProgram {
     }
 
     private boolean choiceMenu() {
-//        if (currentPerson != null) {
+//        if (currentPerson != null) { //todo вернуть обратно, и можно сделать одной строкой без if^&, будет работать
 //            ui.printMessage("CurrentPerson = {" + currentPerson + "}");
 //        } else {
 //            ui.printMessage("CurrentPerson is null");
@@ -129,8 +129,9 @@ public class RunProgram {
     }
 
     private void updatePerson() {
-        currentPerson = personService.getPersonById(ui.enterString("Enter the ID for downloading."));
-        if (currentPerson != null) {
+        currentPerson = personService.getPersonById(ui.enterString("Enter the ID for downloading.")); //todo вернуть currentPerson.getId(), не надо вводить тут заново
+        if (currentPerson != null) { //todo если null можно сразу выходить с метода и не продолжать,
+            // чтобы не плодить лишних уровней вложенности
             String currentId = currentPerson.getId();
             currentPerson = personService.readPersonFromConsole();
             currentPerson.setId(currentId);
@@ -141,11 +142,11 @@ public class RunProgram {
                 ui.printMessage("Error person has not saved");
             }
         } else {
-            ui.printMessage("Create person for saving.");
+            ui.printMessage("Create person for saving."); //todo просто пишем что не выбран person
         }
     }
 
-    private void deletePerson() {
+    private void deletePerson() { //todo опять ломаем логику. id должно браться из currentPerson.getId() и не надо вводить id в этм методе
         String currentId;
         currentId = ui.enterString("Enter the ID for downloading.");//todo как сделать, чтобы после этого метода не надо было нажмимать enter
         currentPerson = personService.getPersonById(currentId);
@@ -153,7 +154,7 @@ public class RunProgram {
             ui.enterString(currentPerson.toString());
             currentId = currentPerson.getId();
             if (personService.delete(currentId)) {
-                ui.enterString("Person deleted successfully");
+                ui.enterString("Person deleted successfully"); //todo зачем enterString?
             } else ui.enterString("Wrong deleting. Press enter.");
         } else ui.enterString("ID did not find. Press enter.");
     }

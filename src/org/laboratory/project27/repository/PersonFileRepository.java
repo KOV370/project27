@@ -90,8 +90,9 @@ public class PersonFileRepository {
         int id;
         try {
             id = Integer.parseInt(getLastId()) + 1;
-        } catch (NumberFormatException NullPointerException) {
-            id = 0;
+        } catch (NumberFormatException NullPointerException) { //todo null pointer exception нужно не кэтчить
+            //а проверять перед обращением к объекту через if
+            id = 0; //todo можно id=0 написать в 90 строке при объявлении, тогда тут не придется
         }
         return String.valueOf(id);
     }
@@ -117,8 +118,9 @@ public class PersonFileRepository {
     public List<Person> delete(String id) {//todo
         List<Person> personList = findAll();
         Optional<Person> personStream = personList.stream().filter(n -> n.getId().equals(id)).findFirst();
-        if (personStream.isPresent()) {
-            personList.remove(personStream.get());
+        if (personStream.isPresent()) { //todo название переменной?
+            personList.remove(personStream.get()); //todo вместо remove можно сделать в 120й строке filter c условием !
+            // тогда не придется делать дополнительных проверк
         } else {
             personList = null;
         }

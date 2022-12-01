@@ -39,10 +39,12 @@ public class PersonService {
         double salary;
         boolean isError;
         do {
-            if ((salary = ui.readDouble("Set the salary.")) != 0) {
+            if ((salary = ui.readDouble("Set the salary.")) != 0) { //todo стало хуже. вернуть как было, только без exit
                 return salary;
             } else {
-                exitProgram();
+                exitProgram(); //todo нет ! сервис просто возвращает 0 в вызывающем методе,
+                // сервис не должен делать никакой выход из программы это не его задача,
+                // можно бросить эксепшен и обработать его наверху либо вернуть 0 и обработать его наверху
                 isError = true;
             }
         } while (isError);
@@ -83,7 +85,7 @@ public class PersonService {
         boolean isError ;
         do {
             do {
-                if ((birthYear = ui.readInt("Enter birthYear")) != 0) {
+                if ((birthYear = ui.readInt("Enter birthYear")) != 0) { //todo венуть как было только без exit
                     isError = false;
                 } else {
                     exitProgram();
@@ -148,7 +150,7 @@ public class PersonService {
         return confirm;
     }
 
-    public void exitProgram() {
+    public void exitProgram() { //todo не будет exitProgram в сервисе! Уже несколько раз на этом делал акцент
         try {
             String exit = ui.enterString("9-exit program or other-continue");
             if (Integer.valueOf(exit) == 9) {
@@ -164,11 +166,11 @@ public class PersonService {
         personList.sort(personComparator);
     }
 
-    public boolean confirm() {//todo
+    public boolean confirm() {//todo метод должен быть не в сервисе а в слое UI
         boolean confirm = false;
         String yes = "y";
         if (ui.enterString("For confirming deleting enter \"Y\", others - cancel.").equalsIgnoreCase(yes)) {
-            confirm = true;
+            confirm = true; //todo не надо хардкодить deleting в этом методе.
         }
         return confirm;
     }
