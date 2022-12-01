@@ -1,9 +1,7 @@
 package org.laboratory.project27.service;
 
 import org.laboratory.project27.concoleUserDialog.ConsoleUserDialog;
-import org.laboratory.project27.model.Person;
-import org.laboratory.project27.model.PersonComparator;
-import org.laboratory.project27.model.PersonJob;
+import org.laboratory.project27.model.*;
 import org.laboratory.project27.repository.PersonFileRepository;
 
 import java.util.Arrays;
@@ -37,16 +35,22 @@ public class PersonService {
 
     private double enterSalary() {
         double salary;
-        boolean isError;
         do {
-            if ((salary = ui.readDouble("Set the salary.")) != 0) {
-                return salary;
-            } else {
-                exitProgram();
-                isError = true;
-            }
-        } while (isError);
+            salary = ui.readDouble("Set the salary.");
+        } while (!validateSalary(salary));
         return salary;
+    }
+
+    private boolean validateSalary(double salary) {
+        if (salary == 0) {
+            throw new IllegalValueException("Exception! Salary value is 0");
+        }
+        if (salary < 0 || salary > 100000) {
+            ui.printMessage("Salary must be from 0 till 100000");
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public List<Person> findAll() {//todo
@@ -80,21 +84,16 @@ public class PersonService {
 
     private int enterBirthYear() {
         int birthYear;
-        boolean isError ;
         do {
-            do {
-                if ((birthYear = ui.readInt("Enter birthYear")) != 0) {
-                    isError = false;
-                } else {
-                    exitProgram();
-                    isError = true;
-                }
-            } while (isError);
-        } while (!isValid(birthYear));
+            birthYear = ui.readInt("Enter birthYear");
+        } while (!validateBirthday(birthYear));
         return birthYear;
     }
 
-    private boolean isValid(int birthYear) {
+    private boolean validateBirthday(int birthYear) {
+        if (birthYear == 0) {
+            throw new IllegalValueException("Value is 0");
+        }
         if (birthYear < 1900 || birthYear > 2030) {
             ui.printMessage("Year must be from 1900 till 2030");
             return false;
@@ -119,25 +118,7 @@ public class PersonService {
         }
     }
 
-    public void updateOleg(String id) {
-        List<Person> personList = findAll();
-        sortList(personList);
-        Optional<Person> foundOptional = personList.stream().filter(n -> n.getId().equals(id)).findFirst();
-        if (foundOptional.isPresent()) {
-            Person foundPerson = foundOptional.get();
-            setUpdatedPersonOleg(foundPerson);
-        } else personList = null;
-        repository.saveAll(personList);
-    }
-
-    public void setUpdatedPersonOleg(Person person) {
-        person.setFirstName(ui.enterString("Enter the first name for updating"));
-        person.setLastName(ui.enterString("Enter the last name for updating"));
-        person.setBirthYear(enterBirthYear());
-        person.setJob(Person.setVariableJob(ui.enterString(catalogPersonJobs())));
-        person.setSalary(enterSalary());
-    }
-
+//
     public boolean delete(String id) {
         boolean confirm;
         List<Person> personList = repository.delete(id);
@@ -145,17 +126,13 @@ public class PersonService {
             repository.saveAll(personList);
             confirm = true;
         } else confirm = false;
+        System.out.println(confirm);
         return confirm;
     }
 
-    public void exitProgram() {
-        try {
-            String exit = ui.enterString("9-exit program or other-continue");
-            if (Integer.valueOf(exit) == 9) {
-                System.exit(0);
-            }
-        } catch (NumberFormatException r) {
-            ui.printMessage("Continue entering");
+    public void exitProgram(int zero) {
+        if (zero == 0) {
+            System.exit(0);
         }
     }
 
@@ -175,3 +152,21 @@ public class PersonService {
 }
 
 
+
+//    public void updateOleg(String id) {
+//        List<Person> personList = findAll();
+//        Optional<Person> foundOptional = personList.stream().filter(n -> n.getId().equals(id)).findFirst();
+//        if (foundOptional.isPresent()) {
+//            Person foundPerson = foundOptional.get();
+//            setUpdatedPersonOleg(foundPerson);
+//        } else personList = null;
+//            repository.saveAll(personList);
+//    }
+//
+//    public void setUpdatedPersonOleg(Person person) {
+//        person.setFirstName(ui.enterString("Enter the first name for updating"));
+//        person.setLastName(ui.enterString("Enter the last name for updating"));
+//        person.setBirthYear(enterBirthYear());
+//        person.setJob(Person.setVariableJob(ui.enterString(catalogPersonJobs())));
+//        person.setSalary(enterSalary());
+//    }

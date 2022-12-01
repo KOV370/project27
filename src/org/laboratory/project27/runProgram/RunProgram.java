@@ -1,6 +1,7 @@
 package org.laboratory.project27.runProgram;
 
 import org.laboratory.project27.concoleUserDialog.ConsoleUserDialog;
+import org.laboratory.project27.model.IllegalValueException;
 import org.laboratory.project27.model.Person;
 import org.laboratory.project27.repository.PersonFileRepository;
 import org.laboratory.project27.service.PersonService;
@@ -39,11 +40,7 @@ public class RunProgram {
     }
 
     private boolean choiceMenu() {
-//        if (currentPerson != null) {
-//            ui.printMessage("CurrentPerson = {" + currentPerson + "}");
-//        } else {
-//            ui.printMessage("CurrentPerson is null");
-//        }
+        ui.printMessage("CurrentPerson = {" + currentPerson + "}");
         int numberMenu = ui.readInt("Make your choice");
         {
             switch (numberMenu) {
@@ -100,7 +97,12 @@ public class RunProgram {
     }
 
     private void createPerson() {
-        currentPerson = personService.readPersonFromConsole();
+        ui.printMessage("If you do not know the value - enter 0, but your record wil not save");
+        try {
+            currentPerson = personService.readPersonFromConsole();
+        } catch (IllegalValueException ex) {
+            ui.printMessage(ex.getMessage());
+        }
         ui.printMessage("Current person is: " + currentPerson);
     }
 
@@ -129,7 +131,7 @@ public class RunProgram {
     }
 
     private void updatePerson() {
-        currentPerson = personService.getPersonById(ui.enterString("Enter the ID for downloading."));
+        //      currentPerson = personService.getPersonById(ui.enterString("Enter the ID for downloading."));
         if (currentPerson != null) {
             String currentId = currentPerson.getId();
             currentPerson = personService.readPersonFromConsole();

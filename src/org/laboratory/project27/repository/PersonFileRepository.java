@@ -76,7 +76,7 @@ public class PersonFileRepository {
         }
     }
 
-    public Person update(Person person) {
+    public Person updateAppend(Person person) {
         try (FileWriter fileWriter = new FileWriter(FILE, true)) {
             fileWriter.write(Person.convertPerson(person, DELIMITER));
             return person;
@@ -84,6 +84,16 @@ public class PersonFileRepository {
             System.err.println(ex);
             return null;
         }
+    }
+
+    public Person update(Person person) {
+        List<Person> personList = findAll().stream()
+                .filter(p -> !p.getId().equals(person.getId()))
+                .collect(Collectors.toList());
+        if (saveAll(personList)) {
+            return person;
+        }
+        return null;
     }
 
     private String incrementId() {
@@ -104,14 +114,17 @@ public class PersonFileRepository {
         }
     }
 
-    public void saveAll(List<Person> personList) {
+    public boolean saveAll(List<Person> personList) {
+        boolean successful = true;
         try (FileWriter fileWriter = new FileWriter(FILE, false)) {
             for (Person person : personList) {
                 fileWriter.write(Person.convertPerson(person, DELIMITER));
             }
         } catch (IOException ex) {
             System.err.println(ex);
+            successful = false;
         }
+        return successful;
     }
 
     public List<Person> delete(String id) {//todo
