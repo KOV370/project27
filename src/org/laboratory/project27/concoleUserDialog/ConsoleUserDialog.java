@@ -7,13 +7,17 @@ public class ConsoleUserDialog {
     private final Scanner scanner = new Scanner(System.in);
 
     public int readInt(String message) {
-        int x;
-        try {
-            x = Integer.parseInt(enterString(message));
-        } catch (NumberFormatException e) {
-            printMessage("Wrong format int");
-            x = 0;
-        }
+        int x = 0;
+        boolean isError;
+        do {
+            try {
+                isError = false;
+                x = Integer.parseInt(enterString(message));
+            } catch (NumberFormatException e) {
+                printMessage("Wrong format int");
+                isError = true;
+            }
+        } while (isError);
         return x;
     }
 
@@ -23,14 +27,18 @@ public class ConsoleUserDialog {
     }
 
     public double readDouble(String message) {
-        double d;
-        try {
-            d = Double.parseDouble(enterString(message));
-        } catch (NumberFormatException e) {
-            printMessage("Wrong format double");
-            d = 0;
-        }
-        return d;
+        double x = 0;
+        boolean isError;
+        do {
+            try {
+                isError = false;
+                x = Double.parseDouble(enterString(message));
+            } catch (NumberFormatException e) {
+                printMessage("Wrong format double");
+                isError = true;
+            }
+        } while (isError);
+        return x;
     }
 
     public void printMessage(String message) {
