@@ -1,12 +1,13 @@
 package org.laboratory.project27.service;
 
 import org.laboratory.project27.concoleUserDialog.ConsoleUserDialog;
-import org.laboratory.project27.model.*;
+import org.laboratory.project27.model.IllegalValueException;
+import org.laboratory.project27.model.Person;
+import org.laboratory.project27.model.PersonJob;
 import org.laboratory.project27.repository.PersonFileRepository;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 public class PersonService {
     private ConsoleUserDialog ui;
@@ -124,12 +125,6 @@ public class PersonService {
         } else
             return false;
     }
-
-    public void sortList(List<Person> personList) {
-        PersonComparator personComparator = new PersonComparator();
-        personList.sort(personComparator);
-    }
-
 }
 
 
@@ -143,10 +138,3 @@ public class PersonService {
 //            repository.saveAll(personList);
 //    }
 //
-//    public void setUpdatedPersonOleg(Person person) {
-//        person.setFirstName(ui.enterString("Enter the first name for updating"));
-//        person.setLastName(ui.enterString("Enter the last name for updating"));
-//        person.setBirthYear(enterBirthYear());
-//        person.setJob(Person.setVariableJob(ui.enterString(catalogPersonJobs())));
-//        person.setSalary(enterSalary());
-//    }

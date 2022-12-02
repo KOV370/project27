@@ -1,11 +1,11 @@
 package org.laboratory.project27.repository;
 
 import org.laboratory.project27.model.Person;
+import org.laboratory.project27.model.PersonComparator;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 //todo повторить для удаления так же как и для апдейта
@@ -98,8 +98,9 @@ public class PersonFileRepository {
     }
 
     public boolean delete(Person person) {
-        List<Person> personList = findAll();
-        personList = personList.stream().filter(p -> !p.getId().equals(person.getId())).collect(Collectors.toList());
+        List<Person> personList = findAll().stream()
+                .filter(p -> !p.getId().equals(person.getId()))
+                .collect(Collectors.toList());
         if (saveAll(personList)) {
             return true;
         }
@@ -137,16 +138,11 @@ public class PersonFileRepository {
         return successful;
     }
 
-
-//    public List<Person> delete(String id) {//todo
-//        List<Person> personList = findAll();
-//        Optional<Person> personStream = personList.stream().filter(n -> n.getId().equals(id)).findFirst();//todo в репозитори
-//        if (personStream.isPresent()) {
-//            personList.remove(personStream.get());
-//        } else {
-//            personList = null;
-//        }
-//        return personList;
-//    }
+    public boolean sortList() {
+        List<Person> personList = findAll().stream()
+                .sorted(new PersonComparator())
+                .collect(Collectors.toList());
+        return saveAll(personList);
+    }
 }
 

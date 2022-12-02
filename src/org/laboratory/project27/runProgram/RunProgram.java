@@ -6,16 +6,18 @@ import org.laboratory.project27.model.Person;
 import org.laboratory.project27.repository.PersonFileRepository;
 import org.laboratory.project27.service.PersonService;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 public class RunProgram {
     public static final boolean PROGRAM_EXIT = false;
     public static final boolean CONTINUE_EXECUTION = true;
     private static final String MENU = """
-            Menu
+            Menu : 0-exit,
             1-create new record from console, 2-save record to the file
             3-find record from the file by name, 4-find record from the file by ID
-            5-find all persons, 6-update the person, 7-delete the person, 9-exit""";
+            5-find all persons, 6-update the person, 7-delete the person, 8-sort list""";
     private final ConsoleUserDialog ui;
     private final PersonFileRepository personFileRepository;
     private final PersonService personService;
@@ -65,7 +67,10 @@ public class RunProgram {
                 case 7:
                     deletePerson();
                     break;
-                case 9:
+                case 8:
+                    sortList();
+                    break;
+                case 0:
                     return PROGRAM_EXIT;
                 default:
                     ui.printMessage("No menu item found");
@@ -74,6 +79,15 @@ public class RunProgram {
             return CONTINUE_EXECUTION;
         }
     }
+
+    private void sortList() {
+        if (personFileRepository.sortList()) {
+            ui.printMessage("Sotred successfully");
+        } else {
+            ui.printMessage("Error of sorting.");
+        }
+    }
+
 
     private void findAllPersons() {
         List<Person> persons = personService.findAll();
