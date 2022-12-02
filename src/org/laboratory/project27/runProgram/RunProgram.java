@@ -60,7 +60,7 @@ public class RunProgram {
                     findAllPersons();
                     break;
                 case 6:
-                    updatePersonOleg();
+                    updatePerson();
                     break;
                 case 7:
                     deletePerson();
@@ -119,19 +119,8 @@ public class RunProgram {
         }
     }
 
-    private void updatePersonOleg() {
-        currentPerson = personService.getPersonById(ui.enterString("Enter the ID for downloading."));
-        if (currentPerson != null) {
-            ui.enterString("01" + currentPerson.toString());
-            String currentId = currentPerson.getId();
-            personService.updateOleg(currentId);
-        } else {
-            ui.enterString("ID did not find. Press enter.");
-        }
-    }
 
     private void updatePerson() {
-        //      currentPerson = personService.getPersonById(ui.enterString("Enter the ID for downloading."));
         if (currentPerson != null) {
             String currentId = currentPerson.getId();
             currentPerson = personService.readPersonFromConsole();
@@ -147,20 +136,36 @@ public class RunProgram {
         }
     }
 
-    private void deletePerson() {
-        String currentId;
-        currentId = ui.enterString("Enter the ID for downloading.");//todo как сделать, чтобы после этого метода не надо было нажмимать enter
-        currentPerson = personService.getPersonById(currentId);
+    public void deletePerson() {
+        boolean deleledPerson = false;
         if (currentPerson != null) {
-            ui.enterString(currentPerson.toString());
-            currentId = currentPerson.getId();
-            if (personService.delete(currentId)) {
-                ui.enterString("Person deleted successfully");
-            } else ui.enterString("Wrong deleting. Press enter.");
-        } else ui.enterString("ID did not find. Press enter.");
+            boolean confirm = ui.confirm("Enter \"Y\"- for confirming deleting, other -cancel deleting");
+            if (confirm) {
+                deleledPerson = personService.delete(currentPerson);
+            } else
+                ui.printMessage("Deleting was cancelled");
+        } else {
+            ui.printMessage("Current person is null");
+        }
+        if (deleledPerson) {
+            ui.printMessage("Deleted successfully");
+        } else {
+            ui.printMessage("Error deleting");
+        }
     }
 }
 
+
+//    private void updatePersonOleg() {
+//        currentPerson = personService.getPersonById(ui.enterString("Enter the ID for downloading."));
+//        if (currentPerson != null) {
+//            ui.enterString("01" + currentPerson.toString());
+//            String currentId = currentPerson.getId();
+//            personService.updateOleg(currentId);
+//        } else {
+//            ui.enterString("ID did not find. Press enter.");
+//        }
+//    }
 
 
 

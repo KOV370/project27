@@ -45,5 +45,11 @@ public class ConsoleUserDialog {
         System.out.println(message);
     }
 
-
+    public boolean confirm(String message) {
+        if (enterString(message).equalsIgnoreCase("Y")) {
+            return true;
+        } else
+            return false;
+    }
 }
+

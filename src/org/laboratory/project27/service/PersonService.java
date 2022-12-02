@@ -118,22 +118,11 @@ public class PersonService {
         }
     }
 
-//
-    public boolean delete(String id) {
-        boolean confirm;
-        List<Person> personList = repository.delete(id);
-        if (confirm()) {
-            repository.saveAll(personList);
-            confirm = true;
-        } else confirm = false;
-        System.out.println(confirm);
-        return confirm;
-    }
-
-    public void exitProgram(int zero) {
-        if (zero == 0) {
-            System.exit(0);
-        }
+    public boolean delete(Person person) {
+        if (repository.findPersonById(person.getId()) != null) {
+            return repository.delete(person);
+        } else
+            return false;
     }
 
     public void sortList(List<Person> personList) {
@@ -141,16 +130,7 @@ public class PersonService {
         personList.sort(personComparator);
     }
 
-    public boolean confirm() {//todo
-        boolean confirm = false;
-        String yes = "y";
-        if (ui.enterString("For confirming deleting enter \"Y\", others - cancel.").equalsIgnoreCase(yes)) {
-            confirm = true;
-        }
-        return confirm;
-    }
 }
-
 
 
 //    public void updateOleg(String id) {

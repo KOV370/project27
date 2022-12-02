@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+//todo повторить для удаления так же как и для апдейта
 
 public class PersonFileRepository {
     public static final String FILE = "C:\\JetBrains Projects\\Project27_laboratory.txt";
@@ -90,10 +90,20 @@ public class PersonFileRepository {
         List<Person> personList = findAll().stream()
                 .filter(p -> !p.getId().equals(person.getId()))
                 .collect(Collectors.toList());
+        personList.add(person);//todo добавление измененного person,иначе будет запись без этого кода
         if (saveAll(personList)) {
             return person;
         }
         return null;
+    }
+
+    public boolean delete(Person person) {
+        List<Person> personList = findAll();
+        personList = personList.stream().filter(p -> !p.getId().equals(person.getId())).collect(Collectors.toList());
+        if (saveAll(personList)) {
+            return true;
+        }
+        return false;
     }
 
     private String incrementId() {
@@ -127,15 +137,16 @@ public class PersonFileRepository {
         return successful;
     }
 
-    public List<Person> delete(String id) {//todo
-        List<Person> personList = findAll();
-        Optional<Person> personStream = personList.stream().filter(n -> n.getId().equals(id)).findFirst();
-        if (personStream.isPresent()) {
-            personList.remove(personStream.get());
-        } else {
-            personList = null;
-        }
-        return personList;
-    }
+
+//    public List<Person> delete(String id) {//todo
+//        List<Person> personList = findAll();
+//        Optional<Person> personStream = personList.stream().filter(n -> n.getId().equals(id)).findFirst();//todo в репозитори
+//        if (personStream.isPresent()) {
+//            personList.remove(personStream.get());
+//        } else {
+//            personList = null;
+//        }
+//        return personList;
+//    }
 }
 
