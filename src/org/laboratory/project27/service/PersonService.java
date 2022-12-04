@@ -18,7 +18,8 @@ public class PersonService {
         this.repository = repository;
     }
 
-    public String catalogPersonJobs() {
+    public String catalogPersonJobs() { //todo тут этот метод не нужен, и он не должен возвращать я String,
+        // сервисный метод возвращает список значений, а вызывающий класс его ковертирует в сообщение для пользователя
         return "Enter person job from the list:" + Arrays.toString(PersonJob.values());
     }
 
@@ -120,14 +121,14 @@ public class PersonService {
     }
 
     public boolean delete(Person person) {
-        if (repository.findPersonById(person.getId()) != null) {
-            return repository.delete(person);
-        } else
+        if (repository.findPersonById(person.getId()) == null) { //todo подправил стиль. сначала проверяем на null и сразу выходим
             return false;
+        }
+        return repository.delete(person);
     }
 }
-
-
+//todo удалить все todo во всем проекте
+//todo удалить закомментированный код везде в коде
 //    public void updateOleg(String id) {
 //        List<Person> personList = findAll();
 //        Optional<Person> foundOptional = personList.stream().filter(n -> n.getId().equals(id)).findFirst();

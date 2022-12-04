@@ -81,7 +81,7 @@ public class RunProgram {
     }
 
     private void sortList() {
-        if (personFileRepository.sortList()) {
+        if (personFileRepository.sortList()) { //todo a где service? нельзя его миновать! трехуровневая арихетктура
             ui.printMessage("Sotred successfully");
         } else {
             ui.printMessage("Error of sorting.");
@@ -135,18 +135,21 @@ public class RunProgram {
 
 
     private void updatePerson() {
-        if (currentPerson != null) {
-            String currentId = currentPerson.getId();
-            currentPerson = personService.readPersonFromConsole();
-            currentPerson.setId(currentId);
-            Person updatedPerson = personService.update(currentPerson);
-            if (updatedPerson != null) {
-                ui.printMessage("Person saved successfully");
-            } else {
-                ui.printMessage("Error person has not saved");
-            }
-        } else {
+        if (currentPerson == null) { //todo отрефакторил немного. лучше использовать такой стиль валидации на null
+            //проверили если null сразу вышли. и так избавляемся от else и лишнего уровня вложенности
+            //исправить для остальных методов deletePerson(), savePerson()
             ui.printMessage("Create person for saving.");
+            return;
+        }
+
+        String currentId = currentPerson.getId();
+        currentPerson = personService.readPersonFromConsole();
+        currentPerson.setId(currentId);
+        Person updatedPerson = personService.update(currentPerson);
+        if (updatedPerson != null) {
+            ui.printMessage("Person saved successfully");
+        } else {
+            ui.printMessage("Error person has not saved");
         }
     }
 

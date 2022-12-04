@@ -138,7 +138,10 @@ public class PersonFileRepository {
         return successful;
     }
 
-    public boolean sortList() {
+    public boolean sortList() { //todo сортировка должна выполняться на уровне сервиса, репозиторий просто будет делать save all
+        //причем не всегда при сортирвке нужно будет записывать элементы в базу
+        //пользователь должен иметь возможность сортировки по разным полям например id, firstName, lastName. и не обязательно это записывать в базу
+        //в базе оно может лежать в любом порядке а выводиться пользователю в том виде в котором ему нужно в данный момент
         List<Person> personList = findAll().stream()
                 .sorted(new PersonComparator())
                 .collect(Collectors.toList());
