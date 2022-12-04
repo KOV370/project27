@@ -1,5 +1,10 @@
 package org.laboratory.project27.concoleUserDialog;
 
+import org.laboratory.project27.model.Person;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleUserDialog {
@@ -50,6 +55,14 @@ public class ConsoleUserDialog {
             return true;
         } else
             return false;
+    }
+
+    public void printAll(List<Person> personList) {
+        new BufferedReader(new InputStreamReader(System.in));
+        for (Person person : personList
+        ) {
+            System.out.println(person);
+        }
     }
 }
 

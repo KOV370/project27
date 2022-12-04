@@ -54,7 +54,7 @@ public class PersonService {
         }
     }
 
-    public List<Person> findAll() {//todo
+    public List<Person> findAll() {
         return repository.findAll();
     }
 
@@ -125,8 +125,27 @@ public class PersonService {
         } else
             return false;
     }
-}
 
+    public List<Person> sortListById() {
+        List<Person> personList = repository.sortById();
+        if (personList == null) {
+            return null;
+        } else {
+            ui.printAll(personList);
+            return personList;
+        }
+    }
+
+    public List<Person> sortListByFirstName() {
+        List<Person> personList = repository.sortByFirstName();
+        if (personList == null) {
+            return null;
+        } else {
+            ui.printAll(personList);
+            return personList;
+        }
+    }
+}
 
 //    public void updateOleg(String id) {
 //        List<Person> personList = findAll();

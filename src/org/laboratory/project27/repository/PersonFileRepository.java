@@ -5,10 +5,10 @@ import org.laboratory.project27.model.PersonComparator;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-//todo повторить для удаления так же как и для апдейта
 
 public class PersonFileRepository {
     public static final String FILE = "C:\\JetBrains Projects\\Project27_laboratory.txt";
@@ -90,7 +90,7 @@ public class PersonFileRepository {
         List<Person> personList = findAll().stream()
                 .filter(p -> !p.getId().equals(person.getId()))
                 .collect(Collectors.toList());
-        personList.add(person);//todo добавление измененного person,иначе будет запись без этого кода
+        personList.add(person);
         if (saveAll(personList)) {
             return person;
         }
@@ -108,7 +108,7 @@ public class PersonFileRepository {
     }
 
     private String incrementId() {
-        int id;
+        int id = 0;
         try {
             id = Integer.parseInt(getLastId()) + 1;
         } catch (NumberFormatException NullPointerException) {
@@ -138,11 +138,17 @@ public class PersonFileRepository {
         return successful;
     }
 
-    public boolean sortList() {
+    public List<Person> sortById() {
         List<Person> personList = findAll().stream()
-                .sorted(new PersonComparator())
+                .sorted(Comparator.comparing(person ->Integer.parseInt(person.getId())))
                 .collect(Collectors.toList());
-        return saveAll(personList);
+        return personList;
+    }
+
+    public List<Person> sortByFirstName() {
+        List<Person> personList = findAll().stream()
+                .sorted(Comparator.comparing(Person::getFirstName))
+                .collect(Collectors.toList());
+        return personList;
     }
 }
-
