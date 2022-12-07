@@ -1,5 +1,7 @@
 package org.laboratory.project27.example;
-
+//todo что-то не то с пакаджами
+//помнится мы подключали maven, и создавали файл  pom.xml, он не запушен,
+//по этому у меня не подгрузилась труктура проетка
 import org.laboratory.project27.model.Person;
 
 import java.util.Optional;
@@ -8,7 +10,11 @@ import java.util.Scanner;
 public class RunExample {
 
     public static void main(String[] args) {
-
+        //todo я не вижу нигде тестового класса, подобного как мы создавали на уроке, RunExampleTest
+        // в соответстующем пакадже, который будет использовать аннотации @test в junit тестах
+        //погугли примеры юнит тестов, что это, и какая основная идея написания.
+        //юнит тесты пишутся на сервисные публичные методы. В юнит тестах не должно быть сканнеров.
+        //все тестовые сценарии задаются в виде параметров метода сервисного класса, который мы тестируем.
         Scanner scanner = new Scanner(System.in);
 //        System.out.println("Test 1");
 //                   double a,b,c = 0;
