@@ -8,6 +8,10 @@ public class Person {
     private double salary;
     private String id;
 
+    public Person(String firstName) {
+        this.firstName = firstName;
+    }
+
     public Person(String id, String firstName, String lastName, int birthYear, PersonJob job, double salary) {
         this.id = id;
         this.firstName = firstName;
@@ -38,14 +42,18 @@ public class Person {
     }
 
     public static Person extractPerson(String line, String delimiter) {
-        String[] txt = line.split(delimiter);
-        String id = txt[0];
-        String firstName = txt[1];
-        String lastName = txt[2];
-        int birthYear = Integer.parseInt(txt[3]);
-        PersonJob job = PersonJob.valueOf(txt[4]);
-        double salary = Double.parseDouble(txt[5]);
-        return new Person(id, firstName, lastName, birthYear, job, salary);
+        try {
+            String[] txt = line.split(delimiter);
+            String id = txt[0];
+            String firstName = txt[1];
+            String lastName = txt[2];
+            int birthYear = Integer.parseInt(txt[3]);
+            PersonJob job = PersonJob.valueOf(txt[4]);
+            double salary = Double.parseDouble(txt[5]);
+            return new Person(id, firstName, lastName, birthYear, job, salary);
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            return null;
+        }
     }
 
     public static String convertPerson(Person person, String delimiter) {
@@ -113,5 +121,34 @@ public class Person {
 
     public void setJob(PersonJob job) {
         this.job = job;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Person)) return false;
+
+        Person person = (Person) o;
+
+        if (birthYear != person.birthYear) return false;
+        if (Double.compare(person.salary, salary) != 0) return false;
+        if (firstName != null ? !firstName.equals(person.firstName) : person.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(person.lastName) : person.lastName != null) return false;
+        if (job != person.job) return false;
+        return id != null ? id.equals(person.id) : person.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = firstName != null ? firstName.hashCode() : 0;
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + birthYear;
+        result = 31 * result + (job != null ? job.hashCode() : 0);
+        temp = Double.doubleToLongBits(salary);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        return result;
     }
 }

@@ -138,17 +138,4 @@ public class PersonFileRepository {
         return successful;
     }
 
-    public List<Person> sortById() {
-        List<Person> personList = findAll().stream()
-                .sorted(Comparator.comparing(person ->Integer.parseInt(person.getId())))
-                .collect(Collectors.toList());
-        return personList;
-    }
-
-    public List<Person> sortByFirstName() {
-        List<Person> personList = findAll().stream()
-                .sorted(Comparator.comparing(Person::getFirstName))
-                .collect(Collectors.toList());
-        return personList;
-    }
 }

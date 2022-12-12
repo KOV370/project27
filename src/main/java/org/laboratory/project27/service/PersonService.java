@@ -7,7 +7,10 @@ import org.laboratory.project27.model.PersonJob;
 import org.laboratory.project27.repository.PersonFileRepository;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class PersonService {
     private ConsoleUserDialog ui;
@@ -126,24 +129,36 @@ public class PersonService {
             return false;
     }
 
-    public List<Person> sortListById() {
-        List<Person> personList = repository.sortById();
-        if (personList == null) {
-            return null;
-        } else {
+    public List<Person> sortAllBy(String sortParam) {
+        List<Person> personList = null;
+        if ("Id".equals(sortParam)) {
+            personList = repository.findAll().stream()
+                    .sorted(Comparator.comparing(person -> Integer.parseInt(person.getId())))
+                    .collect(Collectors.toList());
             ui.printAll(personList);
-            return personList;
+        } else if ("FirstName".equals(sortParam)) {
+            personList = repository.findAll().stream()
+                    .sorted(Comparator.comparing(person -> String.valueOf(person.getFirstName())))
+                    .collect(Collectors.toList());
+            ui.printAll(personList);
+        } else if ("BirthYear".equals(sortParam)) {
+            personList = repository.findAll().stream()
+                    .sorted(Comparator.comparing(Person::getBirthYear))
+                    .collect(Collectors.toList());
+            ui.printAll(personList);
+        } else if ("Job".equals(sortParam)) {
+            personList = repository.findAll().stream()
+                    .sorted(Comparator.comparing(Person::getJob))
+                    .collect(Collectors.toList());
+            ui.printAll(personList);
+        } else if ("Salary".equals(sortParam)) {
+            personList = repository.findAll().stream()
+                    .sorted(Comparator.comparing(person -> String.valueOf(person.getSalary())))
+                    .collect(Collectors.toList());
+            ui.printAll(personList);
         }
-    }
+        return personList;
 
-    public List<Person> sortListByFirstName() {
-        List<Person> personList = repository.sortByFirstName();
-        if (personList == null) {
-            return null;
-        } else {
-            ui.printAll(personList);
-            return personList;
-        }
     }
 }
 

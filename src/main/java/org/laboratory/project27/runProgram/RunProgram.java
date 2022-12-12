@@ -19,12 +19,13 @@ public class RunProgram {
     private static final String SORTMENU = """
             Menu :
             1-sortById, 2-sortByFirstName
-            3-sortByLastName, 4-sortByBirthYear
-            5-sortByJob""";
+            3-sortByBirthYear, 4-sortByJob
+            5-sortBySalary""";
     private final ConsoleUserDialog ui;
     private final PersonFileRepository personFileRepository;
     private final PersonService personService;
     private Person currentPerson;
+
 
     public RunProgram() {
         ui = new ConsoleUserDialog();
@@ -89,22 +90,19 @@ public class RunProgram {
         {
             switch (numberMenu) {
                 case 1:
-                    sortById();
+                    sortByParam("Id");
                     break;
                 case 2:
-                    sortByFirstName();
+                    sortByParam("FirstName");
                     break;
                 case 3:
-//                        sortByLastName();
+                    sortByParam("BirthYear");
                     break;
                 case 4:
-//                        sortByBirthYear();
+                    sortByParam("Job");
                     break;
                 case 5:
-//                        sortByJob();
-                    break;
-                case 6:
-                    //                    sortBySalary();
+                    sortByParam("Salary");
                     break;
                 default:
                     ui.printMessage("No menu item found");
@@ -113,46 +111,28 @@ public class RunProgram {
         }
     }
 
-
-    public void sortById() {//todo хочу сделать общий метод для сортировки с передачей только параметра сортировки
-        List<Person> personList;
-        if ((personList = personService.sortListById()) != null) {
+    public void sortByParam(String sortParam) {
+        List<Person> personList = personService.sortAllBy(sortParam);
+        if (personList != null) {
             ui.printMessage("Sorted successfully");
             boolean confirm = ui.confirm("Enter \"Y\"- or saving, other -cancel");
             if (confirm) {
                 personFileRepository.saveAll(personList);
-            } else return;
+            }
         } else {
             ui.printMessage("Error of sorting.");
         }
     }
-
-    private void sortByFirstName() {
-        List<Person> personList;
-        if ((personList = personService.sortListByFirstName()) != null) {
-            ui.printMessage("Sorted successfully");
-            boolean confirm = ui.confirm("Enter \"Y\"- or saving, other -cancel");
-            if (confirm) {
-                personFileRepository.saveAll(personList);
-            } else return;
-        } else {
-            ui.printMessage("Error of sorting.");
-        }
-    }
-
 
     private void findAllPersons() {
         List<Person> persons = personService.findAll();
         for (Person person : persons) {
-            ui.printMessage(person.toString());
+            ui.printMessage("CurrentPerson = {" + person + "}");
         }
     }
 
     private void findPersonByID() {
         currentPerson = personService.getPersonById(ui.enterString("Enter the ID for downloading."));
-//        if (currentPerson != null) {
-//            ui.printMessage(currentPerson.toString());
-//        }
     }
 
     private void findPersonByName() {
@@ -222,16 +202,6 @@ public class RunProgram {
 }
 
 
-//    private void updatePersonOleg() {
-//        currentPerson = personService.getPersonById(ui.enterString("Enter the ID for downloading."));
-//        if (currentPerson != null) {
-//            ui.enterString("01" + currentPerson.toString());
-//            String currentId = currentPerson.getId();
-//            personService.updateOleg(currentId);
-//        } else {
-//            ui.enterString("ID did not find. Press enter.");
-//        }
-//    }
 
 
 
