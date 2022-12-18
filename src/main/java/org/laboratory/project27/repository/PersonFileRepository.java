@@ -1,12 +1,12 @@
 package org.laboratory.project27.repository;
 
 import org.laboratory.project27.model.Person;
-import org.laboratory.project27.model.PersonComparator;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,16 +17,18 @@ public class PersonFileRepository {
 
     public List<Person> findAll() {
         return getLines().stream()
-                .map(line -> Person.extractPerson(line, DELIMITER))
+                .flatMap(line ->
+                        Person.extractPerson(line, DELIMITER).stream().filter(Objects::nonNull)
+                )
                 .collect(Collectors.toList());
     }
 
     public Person findPersonByName(String name) {
         List<String> lines = getLines();
         for (String line : lines) {
-            Person person = Person.extractPerson(line, DELIMITER);
-            if (person.getFirstName().equals(name)) {
-                return person;
+            Optional<Person> optionalPerson = Person.extractPerson(line, DELIMITER);
+            if (optionalPerson.isPresent() && name.equals(optionalPerson.get().getFirstName())) {
+                return optionalPerson.get();
             }
         }
         return null;
@@ -34,10 +36,10 @@ public class PersonFileRepository {
 
     public Person findPersonById(String id) {
         return getLines().stream()
-                .map(line -> Person.extractPerson(line, DELIMITER))
+                .flatMap(line -> Person.extractPerson(line, DELIMITER).stream().filter(Objects::nonNull))
                 .filter(pers -> pers.getId().equals(id))
                 .findFirst()
-                .orElse(null);//todo проверить  null
+                .orElse(null);
     }
 
     public List<String> getLines() {

@@ -51,10 +51,7 @@ public class ConsoleUserDialog {
     }
 
     public boolean confirm(String message) {
-        if (enterString(message).equalsIgnoreCase("Y")) {
-            return true;
-        } else
-            return false;
+        return enterString(message).equalsIgnoreCase("Y");
     }
 
     public void printAll(List<Person> personList) {

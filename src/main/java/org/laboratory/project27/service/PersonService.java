@@ -9,12 +9,11 @@ import org.laboratory.project27.repository.PersonFileRepository;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class PersonService {
-    private ConsoleUserDialog ui;
-    private PersonFileRepository repository;
+    private final ConsoleUserDialog ui;
+    private final PersonFileRepository repository;
 
     public PersonService(ConsoleUserDialog ui, PersonFileRepository repository) {
         this.ui = ui;

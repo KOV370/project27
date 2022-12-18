@@ -1,5 +1,7 @@
 package org.laboratory.project27.model;
 
+import java.util.Optional;
+
 public class Person {
     private String firstName;
     private String lastName;
@@ -41,7 +43,7 @@ public class Person {
         return PersonJob.UNKNOWN;
     }
 
-    public static Person extractPerson(String line, String delimiter) {
+    public static Optional<Person> extractPerson(String line, String delimiter) {
         try {
             String[] txt = line.split(delimiter);
             String id = txt[0];
@@ -50,9 +52,9 @@ public class Person {
             int birthYear = Integer.parseInt(txt[3]);
             PersonJob job = PersonJob.valueOf(txt[4]);
             double salary = Double.parseDouble(txt[5]);
-            return new Person(id, firstName, lastName, birthYear, job, salary);
+            return Optional.ofNullable(new Person(id, firstName, lastName, birthYear, job, salary));
         } catch (ArrayIndexOutOfBoundsException ex) {
-            return null;
+            return Optional.empty();
         }
     }
 
