@@ -23,10 +23,31 @@ public class PersonFileRepository {
                 .collect(Collectors.toList());
     }
 
+    //todo variant 2
+    // https://www.baeldung.com/java-filter-stream-of-optional
+//    public List<Person> findAll() {
+//        return getLines().stream()
+//                .map(line -> Person.extractPerson(line, DELIMITER))
+//                .filter(Optional::isPresent)
+//                .map(Optional::get)
+//                .collect(Collectors.toList());
+//    }
+
+    //todo variant 3, java 9
+//    public List<Person> findAll() {
+//        return getLines().stream()
+//                .map(line -> Person.extractPerson(line, DELIMITER))
+//                .flatMap(Optional::stream)
+//                .collect(Collectors.toList());
+//    }
+
     public Person findPersonByName(String name) {
         List<String> lines = getLines();
         for (String line : lines) {
             Optional<Person> optionalPerson = Person.extractPerson(line, DELIMITER);
+            //todo попробуй так же сделать вариант без использования for и if, а чисто через стримы.
+            // см примеры выше в комментариях строки 26 и 36
+            // if  optionalPerson.isPresent() плохо т.к. это не фукнциональный стиль, а стиль java7
             if (optionalPerson.isPresent() && name.equals(optionalPerson.get().getFirstName())) {
                 return optionalPerson.get();
             }
@@ -34,7 +55,9 @@ public class PersonFileRepository {
         return null;
     }
 
-    public Person findPersonById(String id) {
+    public Person findPersonById(String id) { //todo попробуй так же сделать дополнительно два варианта реализации,
+        // по аналагии с двумя моими примерами выше в комментариях, строки 26 и 36
+
         return getLines().stream()
                 .flatMap(line -> Person.extractPerson(line, DELIMITER).stream().filter(Objects::nonNull))
                 .filter(pers -> pers.getId().equals(id))
@@ -103,23 +126,23 @@ public class PersonFileRepository {
         List<Person> personList = findAll().stream()
                 .filter(p -> !p.getId().equals(person.getId()))
                 .collect(Collectors.toList());
-        if (saveAll(personList)) {
+        if (saveAll(personList)) { //todo if statement can be simplified
             return true;
         }
         return false;
     }
 
     private String incrementId() {
-        int id = 0;
+        int id = 0; //todo Warning:(136, 18) Variable 'id' initializer '0' is redundant
         try {
             id = Integer.parseInt(getLastId()) + 1;
         } catch (NumberFormatException NullPointerException) {
-            id = 0;
+            id = 0; //todo Warning:(140, 13) Variable is already assigned to this value
         }
         return String.valueOf(id);
     }
 
-    public void saveID(String id) {
+    public void saveID(String id) { //todo Warning:(146, 80) Unnecessary semicolon ';'
         try (FileWriter fileWriter = new FileWriter(FILE_PERSON_LAST_ID, false);) {
             fileWriter.write(String.valueOf(id));
         } catch (IOException ex) {
