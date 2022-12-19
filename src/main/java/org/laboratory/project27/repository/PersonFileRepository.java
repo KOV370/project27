@@ -115,14 +115,11 @@ public class PersonFileRepository {
         List<Person> personList = findAll().stream()
                 .filter(p -> !p.getId().equals(person.getId()))
                 .collect(Collectors.toList());
-        if (saveAll(personList)) {
-            return true;
-        }
-        return false;
+        return saveAll(personList);
     }
 
     private String incrementId() {
-        int id = 0;
+        int id;
         try {
             id = Integer.parseInt(getLastId()) + 1;
         } catch (NumberFormatException NullPointerException) {
@@ -132,7 +129,7 @@ public class PersonFileRepository {
     }
 
     public void saveID(String id) {
-        try (FileWriter fileWriter = new FileWriter(FILE_PERSON_LAST_ID, false);) {
+        try (FileWriter fileWriter = new FileWriter(FILE_PERSON_LAST_ID, false)) {
             fileWriter.write(String.valueOf(id));
         } catch (IOException ex) {
             System.err.println(ex);
