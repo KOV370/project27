@@ -16,28 +16,40 @@ public class PersonFileRepository {
     public static final String DELIMITER = "#";
 
     public List<Person> findAll() {
-        return getLines().stream()
-                .flatMap(line ->
-                        Person.extractPerson(line, DELIMITER).stream().filter(Objects::nonNull)
-                )
+        return getLines().stream()//вариант 3
+                .map(line -> Person.extractPerson(line, DELIMITER))
+                .flatMap(Optional::stream)
                 .collect(Collectors.toList());
+
+
+//        return getLines().stream() // вариант 2
+//                .map(line->Person.extractPerson(line,DELIMITER))
+//                .filter(Optional::isPresent)
+//                .map(Optional::get)
+//                .collect(Collectors.toList());
+
+//        return getLines().stream() // вариант 1
+//                .flatMap(line ->
+//                        Person.extractPerson(line, DELIMITER).stream().filter(Objects::nonNull)
+//                )
+//                .collect(Collectors.toList());
     }
 
     public Person findPersonByName(String name) {
-        List<String> lines = getLines();
-        for (String line : lines) {
-            Optional<Person> optionalPerson = Person.extractPerson(line, DELIMITER);
-            if (optionalPerson.isPresent() && name.equals(optionalPerson.get().getFirstName())) {
-                return optionalPerson.get();
-            }
-        }
-        return null;
+        return getLines().stream()
+                .map(line -> Person.extractPerson(line, DELIMITER))
+                .flatMap(Optional::stream)
+                .filter(p -> p.getFirstName().equals(name))
+                .findAny()
+                .orElse(null);
     }
 
     public Person findPersonById(String id) {
         return getLines().stream()
-                .flatMap(line -> Person.extractPerson(line, DELIMITER).stream().filter(Objects::nonNull))
-                .filter(pers -> pers.getId().equals(id))
+                .map(line -> Person.extractPerson(line, DELIMITER))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(p -> Objects.equals(p.getId(), id))
                 .findFirst()
                 .orElse(null);
     }
