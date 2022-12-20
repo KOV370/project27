@@ -4,6 +4,7 @@ import org.laboratory.project27.concoleUserDialog.ConsoleUserDialog;
 import org.laboratory.project27.model.IllegalValueException;
 import org.laboratory.project27.model.Person;
 import org.laboratory.project27.repository.PersonFileRepository;
+import org.laboratory.project27.repository.PersonRepository;
 import org.laboratory.project27.service.PersonService;
 
 import java.util.List;
@@ -21,16 +22,22 @@ public class RunProgram {
             1-sortById, 2-sortByFirstName
             3-sortByBirthYear, 4-sortByJob
             5-sortBySalary""";
+    private static final String QUERYFINDALL = """
+            SELECT*FROM person
+            """;
+
     private final ConsoleUserDialog ui;
     private final PersonFileRepository personFileRepository;
     private final PersonService personService;
+    private final PersonRepository personRepository;
     private Person currentPerson;
 
 
     public RunProgram() {
         ui = new ConsoleUserDialog();
         personFileRepository = new PersonFileRepository();
-        personService = new PersonService(ui, personFileRepository);
+        personRepository = new PersonRepository();
+        personService = new PersonService(ui, personFileRepository, personRepository);
     }
 
     public static void main(String[] args) {
@@ -63,7 +70,7 @@ public class RunProgram {
                     findPersonByID();
                     break;
                 case 5:
-                    findAllPersons();
+                    findAllPersons(QUERYFINDALL);
                     break;
                 case 6:
                     updatePerson();
@@ -124,8 +131,8 @@ public class RunProgram {
         }
     }
 
-    private void findAllPersons() {
-        List<Person> persons = personService.findAll();
+    private void findAllPersons(String query) {
+        List<Person> persons = personService.findAll(query);
         for (Person person : persons) {
             ui.printMessage("CurrentPerson = {" + person + "}");
         }

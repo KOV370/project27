@@ -5,6 +5,7 @@ import org.laboratory.project27.model.IllegalValueException;
 import org.laboratory.project27.model.Person;
 import org.laboratory.project27.model.PersonJob;
 import org.laboratory.project27.repository.PersonFileRepository;
+import org.laboratory.project27.repository.PersonRepository;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -14,10 +15,12 @@ import java.util.stream.Collectors;
 public class PersonService {
     private final ConsoleUserDialog ui;
     private final PersonFileRepository repository;
+    private final PersonRepository personRepository;
 
-    public PersonService(ConsoleUserDialog ui, PersonFileRepository repository) {
+    public PersonService(ConsoleUserDialog ui, PersonFileRepository repository, PersonRepository personRepository) {
         this.ui = ui;
         this.repository = repository;
+        this.personRepository = personRepository;
     }
 
     public String catalogPersonJobs() {
@@ -56,8 +59,8 @@ public class PersonService {
         }
     }
 
-    public List<Person> findAll() {
-        return repository.findAll();
+    public List<Person> findAll(String query) {
+        return personRepository.findAll(query);
     }
 
     public Person getPersonByName(String name) {
