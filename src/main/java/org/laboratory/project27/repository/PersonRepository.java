@@ -13,7 +13,14 @@ import java.util.List;
 
 public class PersonRepository {
 //    private static final String GET_ALL = "SELECT * FROM project_27.person";
-
+//todo метод написан хорошо. продолжаем дальше. query должно быть в константах, а не параметром.
+// 2. добавь методы findById(String id) и findByName(String name), которые будут вызываться из сервиса.
+// в каждом методе будет sql query "select * from project_27.person where " + "id = " + id
+// (или "name = " + name) и т.д. параметр по которому будет фильтр.
+// аналогично можно добавить парметр с полем сотрировки в методы (findAll(), findByNam() и т.д,
+// есть разные варианты, можно погуглить примеры, на данный момент можно брать самую простую реализацию
+// просто чтобы понять принцип
+// 3. после пункта 2 можно реалзиовывать методы create() и update()
     public List<Person> findAll(String query) {
         List<Person> personList = new ArrayList<>();
         try (Connection conn = MySqlConnection.getConnection()) {

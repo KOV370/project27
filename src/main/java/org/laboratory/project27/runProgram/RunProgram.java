@@ -22,7 +22,9 @@ public class RunProgram {
             1-sortById, 2-sortByFirstName
             3-sortByBirthYear, 4-sortByJob
             5-sortBySalary""";
-    private static final String QUERYFINDALL = """
+    //todo тут не должно быть query это уровень репозитория, юай и сервис не должны использовать sql.
+    //sql эапросы это уровень репозитория
+    private static final String QUERYFINDALL = """ 
             SELECT*FROM person
             """;
 
@@ -70,7 +72,7 @@ public class RunProgram {
                     findPersonByID();
                     break;
                 case 5:
-                    findAllPersons(QUERYFINDALL);
+                    findAllPersons(QUERYFINDALL); //todo remove query
                     break;
                 case 6:
                     updatePerson();
@@ -131,7 +133,7 @@ public class RunProgram {
         }
     }
 
-    private void findAllPersons(String query) {
+    private void findAllPersons(String query) { //todo не должно быть query in RunProgram class
         List<Person> persons = personService.findAll(query);
         for (Person person : persons) {
             ui.printMessage("CurrentPerson = {" + person + "}");

@@ -59,7 +59,7 @@ public class PersonService {
         }
     }
 
-    public List<Person> findAll(String query) {
+    public List<Person> findAll(String query) { //todo in service layer do not use query, only in repository layer
         return personRepository.findAll(query);
     }
 
