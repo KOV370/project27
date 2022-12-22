@@ -22,9 +22,7 @@ public class RunProgram {
             1-sortById, 2-sortByFirstName
             3-sortByBirthYear, 4-sortByJob
             5-sortBySalary""";
-    private static final String QUERYFINDALL = """
-            SELECT*FROM person
-            """;
+
 
     private final ConsoleUserDialog ui;
     private final PersonFileRepository personFileRepository;
@@ -70,7 +68,7 @@ public class RunProgram {
                     findPersonByID();
                     break;
                 case 5:
-                    findAllPersons(QUERYFINDALL);
+                    findAllPersons();
                     break;
                 case 6:
                     updatePerson();
@@ -131,8 +129,8 @@ public class RunProgram {
         }
     }
 
-    private void findAllPersons(String query) {
-        List<Person> persons = personService.findAll(query);
+    private void findAllPersons() {
+        List<Person> persons = personService.findAll();
         for (Person person : persons) {
             ui.printMessage("CurrentPerson = {" + person + "}");
         }
@@ -142,10 +140,10 @@ public class RunProgram {
         currentPerson = personService.getPersonById(ui.enterString("Enter the ID for downloading."));
     }
 
-    private void findPersonByName() {
-        currentPerson = personService.getPersonByName(ui.enterString("Enter the name for downloading."));
-        if (currentPerson != null) {
-            ui.printMessage(currentPerson.toString());
+    private void findPersonByName() { //todo changed from person to the list because can be a few persons with the same name
+        List<Person>  currentPerson = personService.getPersonByName(ui.enterString("Enter the name for downloading."));
+        for (Person person : currentPerson) {
+            ui.printMessage("CurrentPerson = {" + person + "}");
         }
     }
 

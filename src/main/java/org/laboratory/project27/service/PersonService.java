@@ -59,12 +59,12 @@ public class PersonService {
         }
     }
 
-    public List<Person> findAll(String query) {
-        return personRepository.findAll(query);
+    public List<Person> findAll() {
+        return personRepository.findAll();
     }
 
-    public Person getPersonByName(String name) {
-        Person person = repository.findPersonByName(name);
+    public List<Person> getPersonByName(String name) {
+        List<Person> person = personRepository.findPersonByName(name);
         if (person == null) {
             ui.printMessage("Person not found");
         }
@@ -72,7 +72,7 @@ public class PersonService {
     }
 
     public Person getPersonById(String id) {
-        Person person = repository.findPersonById(id);
+        Person person = personRepository.findPersonById(id);
         if (person == null) {
             ui.printMessage("ID not found");
         }
