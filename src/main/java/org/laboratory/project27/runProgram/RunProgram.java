@@ -14,9 +14,9 @@ public class RunProgram {
     public static final boolean CONTINUE_EXECUTION = true;
     private static final String MENU = """
             Menu : 0-exit,
-            1-create new record from console, 2-save record to the file
+            1-create new record from console, 2-sort list
             3-find record from the file by name, 4-find record from the file by ID
-            5-find all persons, 6-update the person, 7-delete the person, 8-sort list""";
+            5-find all persons, 6-update the person, 7-delete the person """;
     private static final String SORTMENU = """
             Menu :
             1-sortById, 2-sortByFirstName
@@ -59,7 +59,7 @@ public class RunProgram {
                     createPerson();
                     break;
                 case 2:
-                    savePerson();
+                    sortList();
                     break;
                 case 3:
                     findPersonByName();
@@ -75,9 +75,6 @@ public class RunProgram {
                     break;
                 case 7:
                     deletePerson();
-                    break;
-                case 8:
-                    sortList();
                     break;
                 case 0:
                     return PROGRAM_EXIT;
@@ -95,19 +92,19 @@ public class RunProgram {
         {
             switch (numberMenu) {
                 case 1:
-                    sortByParam("Id");
+                    sortByParam("id");
                     break;
                 case 2:
-                    sortByParam("FirstName");
+                    sortByParam("firstName");
                     break;
                 case 3:
-                    sortByParam("BirthYear");
+                    sortByParam("birthYear");
                     break;
                 case 4:
-                    sortByParam("Job");
+                    sortByParam("job");
                     break;
                 case 5:
-                    sortByParam("Salary");
+                    sortByParam("salary");
                     break;
                 default:
                     ui.printMessage("No menu item found");
@@ -117,15 +114,9 @@ public class RunProgram {
     }
 
     public void sortByParam(String sortParam) {
-        List<Person> personList = personService.sortAllBy(sortParam);
-        if (personList != null) {
-            ui.printMessage("Sorted successfully");
-            boolean confirm = ui.confirm("Enter \"Y\"- or saving, other -cancel");
-            if (confirm) {
-                personFileRepository.saveAll(personList);
-            }
-        } else {
-            ui.printMessage("Error of sorting.");
+        List<Person> persons = personService.sortAllBy(sortParam);
+        for (Person person : persons) {
+            ui.printMessage(String.valueOf(person));
         }
     }
 
@@ -138,10 +129,13 @@ public class RunProgram {
 
     private void findPersonByID() {
         currentPerson = personService.getPersonById(ui.enterString("Enter the ID for downloading."));
+        if (currentPerson == null) {
+            ui.printMessage("ID not found");
+        }
     }
 
-    private void findPersonByName() { //todo changed from person to the list because can be a few persons with the same name
-        List<Person>  currentPerson = personService.getPersonByName(ui.enterString("Enter the name for downloading."));
+    private void findPersonByName() {
+        List<Person> currentPerson = personService.getPersonByName(ui.enterString("Enter the name for downloading."));
         for (Person person : currentPerson) {
             ui.printMessage("CurrentPerson = {" + person + "}");
         }
@@ -150,50 +144,31 @@ public class RunProgram {
     private void createPerson() {
         ui.printMessage("If you do not know the value - enter 0, but your record wil not save");
         try {
-            currentPerson = personService.readPersonFromConsole();
+            currentPerson = personRepository.create(personService.readPersonFromConsole());
         } catch (IllegalValueException ex) {
             ui.printMessage(ex.getMessage());
         }
         ui.printMessage("Current person is: " + currentPerson);
     }
 
-    private void savePerson() {
-        if (currentPerson == null) {
-            ui.printMessage("Create person for saving.");
-            return;
-        }
-        Person createdPerson = personService.create(currentPerson);
-        if (createdPerson != null) {
-            ui.printMessage("Person saved successfully");
-        } else {
-            ui.printMessage("Error person has not saved");
-        }
-    }
-
-
     private void updatePerson() {
+        currentPerson = personService.getPersonById(ui.enterString("Enter the ID for downloading."));
         if (currentPerson == null) {
-            ui.printMessage("Create person for saving");
-            return;
-        }
-        String currentId = currentPerson.getId();
-        currentPerson = personService.readPersonFromConsole();
-        currentPerson.setId(currentId);
-        Person updatedPerson = personService.update(currentPerson);
-        if (updatedPerson != null) {
-            ui.printMessage("Person saved successfully");
+            ui.printMessage("ID not found");
         } else {
-            ui.printMessage("Error person has not saved");
+            String id = currentPerson.getId();
+            personService.update(id);
         }
     }
 
     public void deletePerson() {
+        currentPerson = personService.getPersonById(ui.enterString("Enter the ID for deleting."));
         if (currentPerson == null) {
             ui.printMessage("Current person is null");
             return;
         }
         boolean deleledPerson = false;
-        boolean confirm = ui.confirm("Enter \"Y\"- for confirming deleting, other -cancel deleting");
+        boolean confirm = ui.confirm(currentPerson + "\n" + "Enter \"Y\"- for confirming deleting, other -cancel deleting");
         if (confirm) {
             deleledPerson = personService.delete(currentPerson);
         } else
@@ -205,6 +180,53 @@ public class RunProgram {
         }
     }
 }
+
+
+//    private void updatePerson() {
+//        if (currentPerson == null) {
+//            ui.printMessage("Create person for saving");
+//            return;
+//        }
+//        String currentId = currentPerson.getId();
+//        currentPerson = personService.readPersonFromConsole();
+//        currentPerson.setId(currentId);
+//        Person updatedPerson = personService.update(currentPerson);
+//        if (updatedPerson != null) {
+//            ui.printMessage("Person saved successfully");
+//        } else {
+//            ui.printMessage("Error person has not saved");
+//        }
+//    }
+
+
+//    public void sortByParam(String sortParam) {
+//        List<Person> personList = personService.sortAllBy(sortParam);
+//        if (personList != null) {
+//            ui.printMessage("Sorted successfully");
+//            boolean confirm = ui.confirm("Enter \"Y\"- or saving, other -cancel");
+//            if (confirm) {
+//                personFileRepository.saveAll(personList);
+//            }
+//        } else {
+//            ui.printMessage("Error of sorting.");
+//        }
+//    }
+
+    //    private void savePerson() {
+//        if (currentPerson == null) {
+//            ui.printMessage("Create person for saving.");
+//            return;
+//        }
+//        Person createdPerson = personService.create(currentPerson);
+//        if (createdPerson != null) {
+//            ui.printMessage("Person saved successfully");
+//        } else {
+//            ui.printMessage("Error person has not saved");
+//        }
+//    }
+
+
+
 
 
 

@@ -72,11 +72,7 @@ public class PersonService {
     }
 
     public Person getPersonById(String id) {
-        Person person = personRepository.findPersonById(id);
-        if (person == null) {
-            ui.printMessage("ID not found");
-        }
-        return person;
+        return personRepository.findPersonById(id).orElse(null);
     }
 
     private String getValidatedString(String message) {
@@ -112,57 +108,55 @@ public class PersonService {
         return !inputString.matches(".*\\d+.*");
     }
 
-    public Person create(Person input) {
-        return repository.create(input);
-    }
-
-    public Person update(Person person) {
-        if (repository.findPersonById(person.getId()) != null) {
-            return repository.update(person);
-        } else {
-            return repository.create(person);
-        }
+    public Person update(String id) {
+        return personRepository.update(id, readPersonFromConsole());
     }
 
     public boolean delete(Person person) {
-        if (repository.findPersonById(person.getId()) != null) {
-            return repository.delete(person);
+        if (personRepository.findPersonById(person.getId()).isPresent()) {
+            return personRepository.delete(person);
         } else
             return false;
     }
 
-    public List<Person> sortAllBy(String sortParam) {
-        List<Person> personList = null;
-        if ("Id".equals(sortParam)) {
-            personList = repository.findAll().stream()
-                    .sorted(Comparator.comparing(person -> Integer.parseInt(person.getId())))
-                    .collect(Collectors.toList());
-            ui.printAll(personList);
-        } else if ("FirstName".equals(sortParam)) {
-            personList = repository.findAll().stream()
-                    .sorted(Comparator.comparing(person -> String.valueOf(person.getFirstName())))
-                    .collect(Collectors.toList());
-            ui.printAll(personList);
-        } else if ("BirthYear".equals(sortParam)) {
-            personList = repository.findAll().stream()
-                    .sorted(Comparator.comparing(Person::getBirthYear))
-                    .collect(Collectors.toList());
-            ui.printAll(personList);
-        } else if ("Job".equals(sortParam)) {
-            personList = repository.findAll().stream()
-                    .sorted(Comparator.comparing(Person::getJob))
-                    .collect(Collectors.toList());
-            ui.printAll(personList);
-        } else if ("Salary".equals(sortParam)) {
-            personList = repository.findAll().stream()
-                    .sorted(Comparator.comparing(person -> String.valueOf(person.getSalary())))
-                    .collect(Collectors.toList());
-            ui.printAll(personList);
-        }
-        return personList;
 
+    public List<Person> sortAllBy(String sortParam) {
+        return personRepository.sortAllBy(sortParam);
     }
 }
+
+//    public List<Person> sortAllBy(String sortParam) {
+//        List<Person> personList = null;
+//        if ("Id".equals(sortParam)) {
+//            personList = repository.findAll().stream()
+//                    .sorted(Comparator.comparing(person -> Integer.parseInt(person.getId())))
+//                    .collect(Collectors.toList());
+//            ui.printAll(personList);
+//        } else if ("FirstName".equals(sortParam)) {
+//            personList = repository.findAll().stream()
+//                    .sorted(Comparator.comparing(person -> String.valueOf(person.getFirstName())))
+//                    .collect(Collectors.toList());
+//            ui.printAll(personList);
+//        } else if ("BirthYear".equals(sortParam)) {
+//            personList = repository.findAll().stream()
+//                    .sorted(Comparator.comparing(Person::getBirthYear))
+//                    .collect(Collectors.toList());
+//            ui.printAll(personList);
+//        } else if ("Job".equals(sortParam)) {
+//            personList = repository.findAll().stream()
+//                    .sorted(Comparator.comparing(Person::getJob))
+//                    .collect(Collectors.toList());
+//            ui.printAll(personList);
+//        } else if ("Salary".equals(sortParam)) {
+//            personList = repository.findAll().stream()
+//                    .sorted(Comparator.comparing(person -> String.valueOf(person.getSalary())))
+//                    .collect(Collectors.toList());
+//            ui.printAll(personList);
+//        }
+//        return personList;
+//
+//    }
+
 
 //    public void updateOleg(String id) {
 //        List<Person> personList = findAll();
@@ -174,3 +168,22 @@ public class PersonService {
 //            repository.saveAll(personList);
 //    }
 //
+
+//    public Person update(Person person) {
+//        if (repository.findPersonById(person.getId()) != null) {
+//            return repository.update(person);
+//        } else {
+//            return repository.create(person);
+//        }
+//    }
+
+//    public boolean delete(Person person) {
+//        if (repository.findPersonById(person.getId()) != null) {
+//            return personRepository.delete(person);
+//        } else
+//            return false;
+//    }
+
+//    public Person create(Person input) {
+//        return repository.create(input);
+//    }
